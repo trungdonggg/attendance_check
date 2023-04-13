@@ -88,4 +88,3 @@ api.add_resource(tbl_position, '/position')
 if __name__ == '__main__':
     parser = reqparse.RequestParser()
     app.run(debug=True)
-    print ('?????')
