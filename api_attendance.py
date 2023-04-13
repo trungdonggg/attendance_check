@@ -6,7 +6,7 @@ import json
 app = Flask(__name__)
 api = Api(app)
 
-connection = pymysql.connect(   # sua cai nay
+connection = pymysql.connect(
     host='localhost',
     user='trungdong',
     password='trungdong',
@@ -26,7 +26,7 @@ def command_format(d,s):
     return s
 
 class tbl_employee(Resource):
-    def get(self):   #sua cai nay
+    def get(self):
         with connection.cursor() as cursor:
             # get all
             if request.args['eid'] == "*":
@@ -38,7 +38,8 @@ class tbl_employee(Resource):
                     data = {
                         'eid':i[0],
                         'name':i[1],
-                        'phone':i[2]
+                        'phone':i[2],
+                        'email':i[3],
                     }
                     drive.append(data)
                 return drive, 200
@@ -51,19 +52,20 @@ class tbl_employee(Resource):
                 data = {
                     'eid':result[0],
                     'name': result[1],
-                    'phone': result[2]
+                    'phone':result[2],
+                    'email':result[3],
                 }
                 return data,200
 
-    def post(self):  # sua cai nay
+    def post(self):
         parser.add_argument('data')
         data = parser.parse_args()['data']
         # convert to json
         data = json.loads(data.replace("'", '"'))
         with connection.cursor() as cursor:
-            sql_post = "INSERT INTO `tbl_employee` (`eid`, `name`, `phone`) " \
-                       "VALUES ('{}', '{}', '{}');"
-            sql_post = sql_post.format(data['eid'], data['name'], data['phone'])
+            sql_post = "INSERT INTO `tbl_employee` (`eid`, `name`, `phone`, `email`) " \
+                       "VALUES ('{}', '{}','{}', '{}');"
+            sql_post = sql_post.format(data['eid'], data['name'],data['phone'], data['email'])
             cursor.execute(sql_post)
             connection.commit()
         return {'status':'success'}, 201
@@ -79,7 +81,7 @@ class tbl_employee(Resource):
             connection.commit()
         return {"status": "success"}, 200
 
-    def put(self):   #sua cai nay
+    def put(self):
         parser.add_argument('data')
         data = parser.parse_args()['data']
         data = json.loads(data.replace("'", '"'))
