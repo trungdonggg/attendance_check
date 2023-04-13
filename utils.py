@@ -1,4 +1,4 @@
-
+import json
 def command_format(d,s):
     l = (list(d.keys()))
     c = ""
@@ -14,4 +14,6 @@ def command_format(d,s):
 
 
 def read_config(file='conf/config.json'):
-    pass
+    with open(file) as f:
+        return json.load(f)
+

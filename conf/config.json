@@ -1,5 +1,10 @@
 {
-  "mysql_server": "",
-  "": "",
-  "": ""
+
+  "DATABASE_00": {
+      "host":"localhost",
+      "user":"trungdong",
+      "password":"trungdong",
+      "db":"cs311"
+  }
+
 }

@@ -1,7 +1,6 @@
 from flask import request
 from flask_restful import Resource
-
-from utils import command_format
+from attendance.utils import command_format
 
 
 class Employee(Resource):
@@ -71,9 +70,8 @@ class Employee(Resource):
         if request.is_json:
             # convert to json
             data = request.get_json(force=True)
-        sql_put = "update tbl_employee set {} where {};"
-        with self.connection.cursor() as cursor:
-            cursor.execute(command_format(data, sql_put))
-            self.connection.commit()
-
+            sql_put = "update tbl_employee set {} where {};"
+            with self.connection.cursor() as cursor:
+                cursor.execute(command_format(data, sql_put))
+                self.connection.commit()
         return {'status':'success'}, 200
