@@ -7,8 +7,6 @@ from utils import *
 app = Flask(__name__)
 api = Api(app)
 
-
-
 conf = read_config()
 
 connection = pymysql.connect(
