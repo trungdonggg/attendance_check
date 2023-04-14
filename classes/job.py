@@ -2,53 +2,57 @@ from flask import request
 from flask_restful import Resource
 from attendance.utils import command_format
 
-
-class Employee(Resource):
-    def __init__(self, db_con):
+class Job(Resource):
+    def __int__(self, db_con):
         self.connection = db_con
 
     def get(self):
         if request.query_string is not None or request.query_string != "":
             with self.connection.cursor() as cursor:
-                # get all
-                if request.args['eid'] == "*":
+                if request.args['jid'] == "*":
                     drive = []
-                    sql = "SELECT * FROM `tbl_employee`"
+                    sql = "SELECT * FROM `tbl_job`"
                     cursor.execute(sql)
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'eid':i[0],
-                            'name':i[1],
-                            'phone':i[2],
-                            'email':i[3],
-                        }
+                            'jid': i[0],
+                            'title': i[1],
+                            'based_salary': i[2],
+                            'from_hour': i[3],
+                            'to_hour': i[4],
+                            'late_coefficient': i[5],
+                            'overtime_coefficient': i[6]
+                            }
                         drive.append(data)
                     return drive, 200
 
-                # get by id
                 else:
-                    sql = "SELECT * FROM `tbl_employee` WHERE `eid`=%s"
-                    cursor.execute(sql, (request.args['eid']))
-                    result = cursor.fetchone()
+                    sql = "SELECT * FROM `tbl_job` WHERE `jid`=%s"
+                    cursor.execute(sql, (request.args['jid']))
+                    i = cursor.fetchone()
                     data = {
-                        'eid':result[0],
-                        'name': result[1],
-                        'phone':result[2],
-                        'email':result[3],
+                        'jid': i[0],
+                        'title': i[1],
+                        'based_salary': i[2],
+                        'from_hour': i[3],
+                        'to_hour': i[4],
+                        'late_coefficient': i[5],
+                        'overtime_coefficient': i[6]
                     }
-                    return data,200
+                    return data, 200
         else:
             return {"status":"error"}
 
     def post(self):
         if request.is_json:
-            # convert to json
             data = request.get_json(force=True)
             with self.connection.cursor() as cursor:
-                sql_post = "INSERT INTO `tbl_employee` (`eid`, `name`, `phone`, `email`) " \
-                           "VALUES ('{}', '{}','{}', '{}');"
-                sql_post = sql_post.format(data['eid'], data['name'],data['phone'], data['email'])
+                sql_post = "INSERT INTO `tbl_job` (`jid`, `title`, `based_salary`, `from_hour`, " \
+                           "`to_hour`, `late_coefficient`, `overtime_coefficient`) " \
+                           "VALUES ('{}', '{}','{}', '{}','{}','{}', '{}');"
+                sql_post = sql_post.format(data['jid'], data['title'],data['based_salary'], data['from_hour'],
+                                           data['to_hour'], data['late_coefficient'],data['overtime_coefficient'])
                 cursor.execute(sql_post)
                 self.connection.commit()
             return {'status':'success'}, 201
@@ -59,11 +63,11 @@ class Employee(Resource):
         if request.is_json:
             # convert to json
             data = request.get_json(force=True)
-            eid = data['eid']
+            jid = data['jid']
             with self.connection.cursor() as cursor:
-                sql_delete = "DELETE FROM `tbl_employee` WHERE `eid`=%s"
+                sql_delete = "DELETE FROM `tbl_job` WHERE `jid`=%s"
                 # Execute the query
-                cursor.execute(sql_delete, eid)
+                cursor.execute(sql_delete, jid)
                 # the connection is not autocommited by default. So we must commit to save our changes.
                 self.connection.commit()
             return {"status": "success"}, 200
@@ -74,7 +78,7 @@ class Employee(Resource):
         if request.is_json:
             # convert to json
             data = request.get_json(force=True)
-            sql_put = "update tbl_employee set {} where {};"
+            sql_put = "update tbl_job set {} where {};"
             with self.connection.cursor() as cursor:
                 cursor.execute(command_format(data, sql_put))
                 self.connection.commit()
