@@ -5,7 +5,7 @@ def command_format(d,s):
     t = "{}='{}'"
     for i in l[1:]:
         b = "{}='{}'"
-        b=b.format(i, d[i])
+        b = b.format(i, d[i])
         c = c+ "," +b
     c = c[1:]
     t = t.format(l[0], d[l[0]])
