@@ -1,4 +1,5 @@
 import json
+import pymysql
 def command_format(d,s):
     l = (list(d.keys()))
     c = ""
@@ -17,3 +18,12 @@ def read_config(file='conf/config.json'):
     with open(file) as f:
         return json.load(f)
 
+
+def db_con():
+    conf = read_config()
+    connection = pymysql.connect(
+        host=conf['DATABASE_00']['host'],
+        user=conf['DATABASE_00']['user'],
+        password=conf['DATABASE_00']['password'],
+        db=conf['DATABASE_00']['db'])
+    return connection
