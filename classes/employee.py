@@ -4,8 +4,8 @@ from attendance.utils import command_format
 
 
 class Employee(Resource):
-    def __init__(self, args):
-        self.connection = args[0]
+    def __init__(self, **kwargs):
+        self.connection = kwargs['connection']
 
     def get(self):
         if request.query_string is not None or request.query_string != "":

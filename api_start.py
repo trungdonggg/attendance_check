@@ -16,7 +16,7 @@ connection = pymysql.connect(
     db=conf['DATABASE_00']['db'])
 
 
-api.add_resource(Employee, '/employee', resource_class_args=(connection,))
+api.add_resource(Employee, '/employee', resource_class_kwargs={"connection":connection})
 
 
 if __name__ == '__main__':
