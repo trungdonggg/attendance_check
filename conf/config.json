@@ -3,8 +3,8 @@
   "DATABASE_00": {
       "host":"localhost",
       "user":"root",
-      "password":"QA2015!@#",
-      "db":"payment_db"
+      "password":"",
+      "db":""
   }
 
 }
