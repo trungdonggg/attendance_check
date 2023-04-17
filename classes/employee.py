@@ -4,8 +4,8 @@ from utils import command_format
 
 
 class Employee(Resource):
-    def __init__(self, db_con):
-        self.connection = db_con
+    def __init__(self, args):
+        self.connection = args[0]
 
     def get(self):
         if request.query_string is not None or request.query_string != "":

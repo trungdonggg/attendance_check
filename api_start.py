@@ -1,6 +1,6 @@
-import pymysql
 from flask import Flask
 from flask_restful import Api
+
 from classes.employee import Employee
 from classes.job import Job
 from utils import *
@@ -16,9 +16,9 @@ connection = pymysql.connect(
     password=conf['DATABASE_00']['password'],
     db=conf['DATABASE_00']['db'])
 
-api.add_resource(Employee(connection), '/employee')
 
-api.add_resource(Job(connection), '/job')
+api.add_resource(Employee(connection), '/employee', resource_class_args=(connection,))
+api.add_resource(Job, '/job', resource_class_args=(connection,))
 
 
 if __name__ == '__main__':

@@ -2,9 +2,9 @@
 
   "DATABASE_00": {
       "host":"localhost",
-      "user":"trungdong",
-      "password":"trungdong",
-      "db":"cs311"
+      "user":"root",
+      "password":"QA2015!@#",
+      "db":"payment_db"
   }
 
 }
