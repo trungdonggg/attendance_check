@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from attendance.utils import command_format
+from utils import command_format
 
 
 class Employee(Resource):
