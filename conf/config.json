@@ -2,9 +2,9 @@
 
   "DATABASE_00": {
       "host":"localhost",
-      "user":"root",
-      "password":"",
-      "db":""
+      "user":"trungdong",
+      "password":"trungdong",
+      "db":"cs311"
   }
 
 }

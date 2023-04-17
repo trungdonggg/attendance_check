@@ -18,7 +18,7 @@ connection = pymysql.connect(
 
 
 api.add_resource(Employee, '/employee', resource_class_args=(connection,))
-api.add_resource(Job, '/job', resource_class_args=(connection,))
+# api.add_resource(Job, '/job', resource_class_args=(connection,))
 
 
 if __name__ == '__main__':
