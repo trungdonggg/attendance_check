@@ -3,12 +3,13 @@ from flask_restful import Resource
 from attendance.utils import command_format
 
 class Job(Resource):
-    def __init__(self, args):
-        self.connection = args[0]
+    def __init__(self, **kwargs):
+        self.connection = kwargs['connection']
 
     def get(self):
         if request.query_string is not None or request.query_string != "":
             with self.connection.cursor() as cursor:
+                # get all
                 if request.args['jid'] == "*":
                     drive = []
                     sql = "SELECT * FROM `tbl_job`"
@@ -18,15 +19,16 @@ class Job(Resource):
                         data = {
                             'jid': i[0],
                             'title': i[1],
-                            'based_salary': i[2],
-                            'from_hour': i[3],
-                            'to_hour': i[4],
+                            'based_salary': str(i[2]),
+                            'from_hour': str(i[3]),
+                            'to_hour': str(i[4]),
                             'late_coefficient': i[5],
                             'overtime_coefficient': i[6]
-                            }
+                        }
                         drive.append(data)
                     return drive, 200
 
+                # get by id
                 else:
                     sql = "SELECT * FROM `tbl_job` WHERE `jid`=%s"
                     cursor.execute(sql, (request.args['jid']))
@@ -34,15 +36,15 @@ class Job(Resource):
                     data = {
                         'jid': i[0],
                         'title': i[1],
-                        'based_salary': i[2],
-                        'from_hour': i[3],
-                        'to_hour': i[4],
+                        'based_salary': str(i[2]),
+                        'from_hour': str(i[3]),
+                        'to_hour': str(i[4]),
                         'late_coefficient': i[5],
                         'overtime_coefficient': i[6]
                     }
                     return data, 200
         else:
-            return {"status":"error"}
+            return {"status": "error"}
 
     def post(self):
         if request.is_json:
