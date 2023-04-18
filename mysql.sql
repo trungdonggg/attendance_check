@@ -1,4 +1,3 @@
-use cs311;
 
 CREATE TABLE tbl_employee(
   eid VARCHAR(10) NOT NULL PRIMARY KEY,

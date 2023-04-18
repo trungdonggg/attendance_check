@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_restful import Api
+from classes.job import Job
+from classes.holiday import Holiday
 
 from classes.employee import Employee
 from utils import *
@@ -17,6 +19,8 @@ connection = pymysql.connect(
 
 
 api.add_resource(Employee, '/employee', resource_class_kwargs={"connection":connection})
+api.add_resource(Job, '/job', resource_class_kwargs={"connection":connection})
+api.add_resource(Holiday, '/holiday', resource_class_kwargs={"connection":connection})
 
 
 if __name__ == '__main__':
