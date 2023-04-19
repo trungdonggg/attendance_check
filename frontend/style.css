@@ -27,6 +27,7 @@
 }
 #navbar__logo{
     background-color: #ff8177;
+    text-align: center;
     background-image: linear-gradient(to top, #ff0844) 0%, #ffb199 100%;
     background-size: 100%;
     -webkit-background-clip: text;
