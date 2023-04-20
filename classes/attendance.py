@@ -1,9 +1,8 @@
 from flask import request
 from flask_restful import Resource
-from utils import command_format
 
 
-class Employee(Resource):
+class Attendance(Resource):
     def __init__(self, db_con):
         self.connection = db_con
 
@@ -11,14 +10,14 @@ class Employee(Resource):
         if request.query_string is not None or request.query_string != "":
             with self.connection.cursor() as cursor:
                     drive = []
-                    sql = "SELECT * FROM `tbl_attendence` WHERE `eid`=%s"
-                    cursor.execute(sql)
+                    sql = "SELECT * FROM `tbl_attendance` WHERE `eid`=%s"
+                    cursor.execute(sql, request.args['eid'])
                     result = cursor.fetchall()
                     for i in result:
                         data = {
                             'eid': i[0],
-                            'clock_in': i[1],
-                            'clock_out': i[2],
+                            'clock_in': str(i[1]),
+                            'clock_out': str(i[2]),
                         }
                         drive.append(data)
                     return drive, 200
@@ -31,8 +30,8 @@ class Employee(Resource):
             data = request.get_json(force=True)
             with self.connection.cursor() as cursor:
                 sql_post = "INSERT INTO `tbl_attendence` (`eid`, `clock_in`, `clock_out`) " \
-                           "VALUES ('{}', '{}','{}');"
-                sql_post = sql_post.format(data['eid'], data['clock_in'], data['clock_out'])
+                           "VALUES ('{}', now(),null);"
+                sql_post = sql_post.format(data['eid'])
                 cursor.execute(sql_post)
                 self.connection.commit()
             return {'status':'success'}, 201
