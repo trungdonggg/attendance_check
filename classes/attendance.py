@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-
+from json import dumps
 
 class Attendance(Resource):
     def __init__(self, **kwargs):
@@ -16,8 +16,8 @@ class Attendance(Resource):
                     for i in result:
                         data = {
                             'eid': i[0],
-                            'clock_in': str(i[1]),
-                            'clock_out': str(i[2]),
+                            'clock_in': i[1],
+                            'clock_out': i[2]
                         }
                         drive.append(data)
                     return drive, 200
@@ -42,4 +42,5 @@ class Attendance(Resource):
         return {"status":"no support"}
 
     def put(self):
+        #????
         return {"status":"no support"}

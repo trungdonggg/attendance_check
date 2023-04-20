@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 
 
-class Employee(Resource):
+class Position(Resource):
     def __init__(self, **kwargs):
         self.connection = kwargs['connection']
 
@@ -19,7 +19,7 @@ class Employee(Resource):
                         data = {
                             'eid':i[0],
                             'jid':i[1],
-                            'from_date':i[2],
+                            'from_date':(i[2]),
                         }
                         drive.append(data)
                     return drive, 200
@@ -34,7 +34,7 @@ class Employee(Resource):
                         data = {
                             'eid': i[0],
                             'jid': i[1],
-                            'from_date': i[2],
+                            'from_date': str(i[2]),
                         }
                         drive.append(data)
                     return drive, 200
