@@ -12,10 +12,10 @@ api = Api(app)
 conf = read_config()
 
 connection = pymysql.connect(
-    host=conf['DATABASE_00']['host'],
-    user=conf['DATABASE_00']['user'],
-    password=conf['DATABASE_00']['password'],
-    db=conf['DATABASE_00']['db'])
+    host=conf['DATABASE_01']['host'],
+    user=conf['DATABASE_01']['user'],
+    password=conf['DATABASE_01']['password'],
+    db=conf['DATABASE_01']['db'])
 
 
 api.add_resource(Employee, '/employee', resource_class_kwargs={"connection":connection})

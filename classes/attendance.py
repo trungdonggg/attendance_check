@@ -3,8 +3,8 @@ from flask_restful import Resource
 
 
 class Attendance(Resource):
-    def __init__(self, db_con):
-        self.connection = db_con
+    def __init__(self, **kwargs):
+        self.connection = kwargs['connection']
 
     def get(self):
         if request.query_string is not None or request.query_string != "":
@@ -29,7 +29,7 @@ class Attendance(Resource):
             # convert to json
             data = request.get_json(force=True)
             with self.connection.cursor() as cursor:
-                sql_post = "INSERT INTO `tbl_attendence` (`eid`, `clock_in`, `clock_out`) " \
+                sql_post = "INSERT INTO `tbl_attendance` (`eid`, `clock_in`, `clock_out`) " \
                            "VALUES ('{}', now(),null);"
                 sql_post = sql_post.format(data['eid'])
                 cursor.execute(sql_post)
