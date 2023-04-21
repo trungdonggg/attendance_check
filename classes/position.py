@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource
+import json
 
 
 class Position(Resource):
@@ -17,9 +18,9 @@ class Position(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'eid':i[0],
-                            'jid':i[1],
-                            'from_date':(i[2]),
+                            'eid':i[1],
+                            'jid':i[2],
+                            'from_date':i[0],
                         }
                         drive.append(data)
                     return drive, 200
@@ -32,9 +33,9 @@ class Position(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'eid': i[0],
-                            'jid': i[1],
-                            'from_date': str(i[2]),
+                            'eid':i[1],
+                            'jid':i[2],
+                            'from_date':i[0],
                         }
                         drive.append(data)
                     return drive, 200

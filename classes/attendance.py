@@ -1,6 +1,5 @@
 from flask import request
 from flask_restful import Resource
-from json import dumps
 
 class Attendance(Resource):
     def __init__(self, **kwargs):
@@ -42,5 +41,16 @@ class Attendance(Resource):
         return {"status":"no support"}
 
     def put(self):
-        #????
-        return {"status":"no support"}
+        if request.is_json:
+            data = request.get_json(force=True)
+            sql_put = "update tbl_attendance set clock_out = now() " \
+                      "where eid = '{}' and clock_out is null " \
+                      "order by clock_in desc limit 1;"
+            sql_put = sql_put.format(data['eid'])
+
+            with self.connection.cursor() as cursor:
+                cursor.execute(sql_put)
+                self.connection.commit()
+            return {'status': 'success'}, 200
+        else:
+            return {"status": "error"}

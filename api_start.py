@@ -5,6 +5,7 @@ from classes.holiday import Holiday
 from classes.attendance import Attendance
 from classes.employee import Employee
 from classes.position import Position
+import pymysql
 
 from utils import *
 
