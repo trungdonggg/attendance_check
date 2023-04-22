@@ -1,7 +1,6 @@
 from flask import request
 from flask_restful import Resource
-import json
-
+from attendance.utils import to_json
 
 class Position(Resource):
     def __init__(self, **kwargs):
@@ -20,7 +19,7 @@ class Position(Resource):
                         data = {
                             'eid':i[1],
                             'jid':i[2],
-                            'from_date':i[0],
+                            'from_date':to_json(i[0]),
                         }
                         drive.append(data)
                     return drive, 200
@@ -35,7 +34,7 @@ class Position(Resource):
                         data = {
                             'eid':i[1],
                             'jid':i[2],
-                            'from_date':i[0],
+                            'from_date':to_json(i[0])
                         }
                         drive.append(data)
                     return drive, 200

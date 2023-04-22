@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from classes.job import Job
 from classes.holiday import Holiday
-from classes.attendance import Attendance
+from classes.attendant import Attendance
 from classes.employee import Employee
 from classes.position import Position
 import pymysql
