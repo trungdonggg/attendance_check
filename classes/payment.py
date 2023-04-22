@@ -16,9 +16,8 @@ class Payment(Resource):
                 for i in result:
                     data = {
                         'eid': i[0],
-                        'name': i[1],
-                        'phone': i[2],
-                        'email': i[3],
+                        'salary': i[1],
+                        'month_year': i[2],
                     }
                     drive.append(data)
                 return drive, 200
