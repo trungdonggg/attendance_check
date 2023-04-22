@@ -2,7 +2,8 @@ import json
 
 from flask import request
 from flask_restful import Resource
-from attendance.utils import to_json
+from attendance.utils import myconverter
+
 
 class Attendance(Resource):
     def __init__(self, **kwargs):
@@ -17,9 +18,9 @@ class Attendance(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'eid': i[0],
-                            'clock_in': (i[1]),
-                            'clock_out': (i[2])
+                            'eid': i[2],
+                            'clock_in': myconverter(i[0]),
+                            'clock_out': myconverter(i[1])
                         }
                         drive.append(data)
                     return drive, 200

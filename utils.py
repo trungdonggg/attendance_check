@@ -1,3 +1,4 @@
+import datetime
 import json
 
 def command_format(d,s):
@@ -19,8 +20,8 @@ def read_config(file='conf/config.json'):
         return json.load(f)
 
 
-def to_json(a_datetime):
-    formatted_datetime = a_datetime.isoformat()
-    json_datetime = json.dumps(formatted_datetime)
-    json_datetime = json_datetime.replace('"',"")
-    return json_datetime
+
+def myconverter(o):
+    if isinstance(o, datetime.datetime):
+        o = o.__str__()
+        return o
