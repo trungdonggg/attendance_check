@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <h1>Employee Data</h1>
+    <table id="employee-table">
+      <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <form>
+        Search: <input type="text" id="searchid" placeholder="ID..">
+      </form>
+      <button onclick="getValue()">Find</button>
+      <table id="employee-list"></table>
+    </table>
+    <script>
+      function getValue(){
+        var t = document.getElementById('searchid').value;
+        if (t == '*'){
+          fetch('http://127.0.0.1:5000/employee?eid=*')
+          .then(response => response.json())
+          .then(data => {
+            const employeeList = document.getElementById('employee-list');
+            employeeList.innerHTML = '';
+            data.forEach(employee => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${employee.eid}</td>
+                <td>${employee.name}</td>
+                <td>${employee.phone}</td>
+                <td>${employee.email}</td>
+              `;
+              employeeList.appendChild(tr);
+            });
+          })
+          .catch(error => console.error(error));
+          
+        } 
+        else if (t =='c001'){
+
+          fetch('http://127.0.0.1:5000/employee?eid=c001')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          } 
+          else if (t =='c002'){
+          fetch('http://127.0.0.1:5000/employee?eid=c002')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          } 
+          else if (t =='c003'){
+          fetch('http://127.0.0.1:5000/employee?eid=c003')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          } 
+          else if (t =='c004'){
+          fetch('http://127.0.0.1:5000/employee?eid=c004')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          }
+          else if (t =='c005'){
+          fetch('http://127.0.0.1:5000/employee?eid=c005')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          } 
+          else if (t =='c006'){
+          fetch('http://127.0.0.1:5000/employee?eid=c006')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          } 
+          else if (t =='c007'){
+          fetch('http://127.0.0.1:5000/employee?eid=c007')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          } 
+          else if (t =='c008'){
+          fetch('http://127.0.0.1:5000/employee?eid=c008')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          } 
+          else if (t =='c009'){
+          fetch('http://127.0.0.1:5000/employee?eid=c009')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          } 
+          else {
+          fetch('http://127.0.0.1:5000/employee?eid=c0010')
+          .then(response => response.json())
+          .then(data => {
+            const employee = data;
+            const employeeList = document.getElementById('employee-list');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => console.error(error));
+          }
+      }
+    </script>
+</body>
+</html>
