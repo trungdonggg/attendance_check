@@ -16,11 +16,10 @@
 
           <!-- this is the search form -->
     <form>
-      Search: <input type="text" id="searchid" placeholder="ID..">
+      Search: <input type="text" id="searchid" placeholder="Employee ID..">
     <!-- this is button to Find -->
       <button type="button" onclick="searchEmployee()">Find</button>
-    <!-- this is the button to SHOW FORM for add Employee -->
-      <button id="show-from-to-add">Add</button>
+    
     </form>
 
           <!-- This is the employee table -->
@@ -35,6 +34,8 @@
         </tr>
       </thead>
       <tbody id="employee-list"></tbody>
+      <!-- this is the button to SHOW FORM for add Employee -->
+      <button id="show-form-to-add-employee">Add</button>
     </table>
 
           <!-- This is the form -->
@@ -102,7 +103,7 @@
   }
       // Add data
 
-      const Show_Form = document.getElementById('show-from-to-add');
+      const Show_Form = document.getElementById('show-form-to-add-employee');
 
       // Get a reference to the form element
       const form = document.getElementById('from-to-add');
