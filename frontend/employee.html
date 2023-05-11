@@ -57,7 +57,8 @@
     <div id="success-message" style="display:none">Data posted successfully</div>
 
     <script>
-      // This is the search and show data
+
+          // SEARCH and SHOW Data
       function searchEmployee(){
         const search = document.getElementById('searchid').value;
         if (search == '*') {
@@ -74,7 +75,7 @@
                 <td>${employee.name}</td>
                 <td>${employee.phone}</td>
                 <td>${employee.email}</td>
-                <td><button>Edit</button><button>Delete</button></td>
+                <td><button>Edit</button><button data-eid="${employee.eid}">Delete</button></td>
               `;
               employeeList.appendChild(tr);
             });
@@ -94,14 +95,14 @@
                 <td>${employee.name}</td>
                 <td>${employee.phone}</td>
                 <td>${employee.email}</td>
-                <td><button>Edit</button><button>Delete</button></td>
+                <td><button>Edit</button><button data-eid="${employee.eid}">Delete</button></td>
               `;
               employeeList.appendChild(tr);
             })
             .catch(error => console.error(error));
             } 
   }
-      // Add data
+          // ADD Data
 
       const Show_Form = document.getElementById('show-form-to-add-employee');
 
@@ -150,7 +151,7 @@
               const successMessage = document.getElementById('success-message');
               successMessage.style.display = 'block';
               document.getElementById('form-to-add').reset();
-              setTimeout(function() { document.getElementById('success-message').style.display = 'none';}, 10);
+              setTimeout(() => {successMessage.innerHTML = '';}, 2000);
               return response.json();
             } else {
               throw new Error('Failed to post data to API.');
@@ -166,25 +167,42 @@
           });
       });
 
-            // Delete data
-      function deleteEmployee(eid) {
-        // Delete data from API
-        fetch(`http://127.0.0.1:5000/employee/${eid}`, {
-          method: 'DELETE'
+            // DELETE data
+        function deleteEmployee(eid) {
+        // Send a DELETE request to the API with the eid value
+        fetch(`http://127.0.0.1:5000/employee`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({eid: eid})
         })
-          .then(response => response.json())
-          .then(data => {
-            // Show success message
-            const successMessage = document.getElementById('success-message');
-            successMessage.innerHTML = 'Employee deleted successfully.';
-
-            // Hide success message after 2 seconds
-            setTimeout(() => {
-              successMessage.innerHTML = '';
-            }, 2000);
-          })
-          .catch(error => console.error(error));
+        .then(response => {
+          // If the request is successful, remove the corresponding table row
+          const row = document.querySelector(`#employee-list tr[data-eid="${eid}"]`);
+          row.parentNode.removeChild(row);
+        })
+        .catch(error => console.error(error));
       }
+
+      // Add an event listener to the employee list table
+      const employeeList = document.getElementById('employee-list');
+      employeeList.addEventListener('click', (event) => {
+        const target = event.target;
+        // Check if the clicked element is a delete button
+        if (target.tagName === 'BUTTON' && target.textContent === 'Delete') {
+          const eid = target.getAttribute('data-eid');
+          const deleteButton = event.target;
+          deleteButton.addEventListener('mouseover', () => {
+            const deleteMessage = document.getElementById('success-message');
+            deleteMessage.style.display = 'block';
+            setTimeout(() => {deleteMessage.style.display = 'none';}, 2000);
+          });
+          deleteEmployee(eid);
+        }
+      });
+          // PUT Data 
+      
     </script>
 </body>
 </html>
