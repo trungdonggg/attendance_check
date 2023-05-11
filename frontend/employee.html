@@ -11,15 +11,12 @@
       <a href="/frontend/main.html">Home</a>
     </button>
 
-
     <h1>Employee Data</h1>
-
           <!-- this is the search form -->
     <form>
       Search: <input type="text" id="searchid" placeholder="Employee ID..">
     <!-- this is button to Find -->
       <button type="button" onclick="searchEmployee()">Find</button>
-    
     </form>
 
           <!-- This is the employee table -->
@@ -51,14 +48,16 @@
       <input type="email" id="email" name="email" required>
       <!-- button to submit for add -->
       <button type="submit">Submit</button>
+          <!-- Success message element -->
+      <div id="success-message" style="display:none">Data posted successfully</div>
     </form>
 
-    <!-- Success message element -->
-    <div id="success-message" style="display:none">Data posted successfully</div>
-
-    <script>
-
+    <!-- Delete success message -->
+    <div id="delete-success-message" style="display:none">Data delete successfully</div>
+  <script>
           // SEARCH and SHOW Data
+
+
       function searchEmployee(){
         const search = document.getElementById('searchid').value;
         if (search == '*') {
@@ -81,93 +80,86 @@
             });
           })
             .catch(error => console.error(error));
-    } else {
-      // pull the data from api for the specific eid
-      fetch(`http://127.0.0.1:5000/employee?eid=${search}`)
-        .then(response => response.json())
-            .then(data => {
-              const employee = data;
-              const employeeList = document.getElementById('employee-list');
-              employeeList.innerHTML ='';// Clean all data table after add the new data
-              const tr = document.createElement('tr');
-              tr.innerHTML = `
-                <td>${employee.eid}</td>
-                <td>${employee.name}</td>
-                <td>${employee.phone}</td>
-                <td>${employee.email}</td>
-                <td><button>Edit</button><button data-eid="${employee.eid}">Delete</button></td>
-              `;
-              employeeList.appendChild(tr);
-            })
-            .catch(error => console.error(error));
-            } 
+          } else {
+            // pull the data from api for the specific eid
+            fetch(`http://127.0.0.1:5000/employee?eid=${search}`)
+              .then(response => response.json())
+                  .then(data => {
+                    const employee = data;
+                    const employeeList = document.getElementById('employee-list');
+                    employeeList.innerHTML ='';// Clean all data table after add the new data
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                      <td>${employee.eid}</td>
+                      <td>${employee.name}</td>
+                      <td>${employee.phone}</td>
+                      <td>${employee.email}</td>
+                      <td><button>Edit</button><button data-eid="${employee.eid}">Delete</button></td>
+                    `;
+                    employeeList.appendChild(tr);
+                  })
+                  .catch(error => console.error(error));
+                  } 
   }
+
           // ADD Data
 
-      const Show_Form = document.getElementById('show-form-to-add-employee');
-
-      // Get a reference to the form element
-      const form = document.getElementById('from-to-add');
-
-      const isFormVisible = localStorage.getItem('isFormVisible') === 'true';
-      if (isFormVisible) {
-        form.style.display = 'block';
-      } else{
-        form.style.display='none';
-      }
-      Show_Form.addEventListener('click', event=>{
-        form.style.display = (form.style.display === 'none') ? 'block' : 'none';
-        localStorage.setItem('isFormVisible', form.style.display === 'block');
-      });
-      // Handle form submission
-      form.addEventListener('submit', event => {
-        // Prevent the default form submission behavior
-        event.preventDefault();
-
-        // Define the API endpoint URL
+        const showFormButton = document.getElementById('show-form-to-add-employee');
+        const form = document.getElementById('from-to-add');
+        const successMessage = document.getElementById('success-message');
         const apiEndpoint = 'http://127.0.0.1:5000/employee?eid=*';
 
-        // Define the data to post to the API as a JavaScript object
-        const postData = {
-          eid: form.elements.eid.value,
-          name: form.elements.name.value,
-          phone: form.elements.phone.value,
-          email: form.elements.email.value
-        };
+        const isFormVisible = localStorage.getItem('isFormVisible') === 'true';
+        form.style.display = isFormVisible ? 'block' : 'none';
 
-        // Define the options for the fetch() function
-        const options = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(postData)
-        };
+        showFormButton.addEventListener('click', event => {
+          form.style.display = form.style.display === 'none' ? 'block' : 'none';
+          localStorage.setItem('isFormVisible', form.style.display === 'block');
+        });
 
-        // Send the HTTP POST request to the API endpoint using fetch()
-        fetch(apiEndpoint, options)
-          .then(response => {
-            if (response.ok) {
-              const successMessage = document.getElementById('success-message');
-              successMessage.style.display = 'block';
-              document.getElementById('form-to-add').reset();
-              setTimeout(() => {successMessage.innerHTML = '';}, 2000);
-              return response.json();
-            } else {
-              throw new Error('Failed to post data to API.');
-            }
-          })
-          .then(data => {
-            console.log('Data posted to API:', data);
-            // Do something with the response data, if needed
-          })
-          .catch(error => {
-            console.error(error);
-            // Handle errors that occurred during the request
-          });
-      });
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+
+          const postData = {
+            eid: form.elements.eid.value,
+            name: form.elements.name.value,
+            phone: form.elements.phone.value,
+            email: form.elements.email.value
+          };
+
+          const options = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(postData)
+          };
+
+          fetch(apiEndpoint, options)
+            .then(response => {
+              if (response.ok) {
+                successMessage.style.display = 'block';
+                form.reset();
+                setTimeout(() => {
+                  successMessage.style.display = 'none';
+                }, 2000);
+                return response.json();
+              } else {
+                throw new Error('Failed to post data to API.');
+              }
+            })
+            .then(data => {
+              console.log('Data posted to API:', data);
+              // Do something with the response data, if needed
+            })
+            .catch(error => {
+              console.error(error);
+              // Handle errors that occurred during the request
+            });
+        });
 
             // DELETE data
+
         function deleteEmployee(eid) {
         // Send a DELETE request to the API with the eid value
         fetch(`http://127.0.0.1:5000/employee`, {
@@ -181,6 +173,8 @@
           // If the request is successful, remove the corresponding table row
           const row = document.querySelector(`#employee-list tr[data-eid="${eid}"]`);
           row.parentNode.removeChild(row);
+          const successMessage = document.getElementById('delete-success-message');
+          successMessage.style.display = 'block';
         })
         .catch(error => console.error(error));
       }
@@ -192,17 +186,18 @@
         // Check if the clicked element is a delete button
         if (target.tagName === 'BUTTON' && target.textContent === 'Delete') {
           const eid = target.getAttribute('data-eid');
-          const deleteButton = event.target;
-          deleteButton.addEventListener('mouseover', () => {
-            const deleteMessage = document.getElementById('success-message');
-            deleteMessage.style.display = 'block';
-            setTimeout(() => {deleteMessage.style.display = 'none';}, 2000);
-          });
           deleteEmployee(eid);
+          const successMessage = document.getElementById('delete-success-message');
+          successMessage.style.display = 'block';
+          setTimeout(() => {
+            successMessage.style.display = 'none';
+          }, 2000);
         }
       });
+
           // PUT Data 
-      
+        
+
     </script>
 </body>
 </html>
