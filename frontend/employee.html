@@ -4,10 +4,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Employee</title>
 </head>
 <body>
+    <button type="button">
+      <a href="/frontend/main.html">Home</a>
+    </button>
+
+
     <h1>Employee Data</h1>
+
+          <!-- this is the search form -->
+    <form>
+      Search: <input type="text" id="searchid" placeholder="ID..">
+    <!-- this is button to Find -->
+      <button type="button" onclick="searchEmployee()">Find</button>
+    <!-- this is the button to SHOW FORM for add Employee -->
+      <button id="show-from-to-add">Add</button>
+    </form>
+
+          <!-- This is the employee table -->
     <table id="employee-table">
       <thead>
         <tr>
@@ -15,23 +31,41 @@
           <th>Name</th>
           <th>Phone</th>
           <th>Email</th>
+          <th>Option</th>
         </tr>
       </thead>
-      <form>
-        Search: <input type="text" id="searchid" placeholder="ID..">
-      </form>
-      <button onclick="getValue()">Find</button>
-      <table id="employee-list"></table>
+      <tbody id="employee-list"></tbody>
     </table>
+
+          <!-- This is the form -->
+    <form id="from-to-add">
+      <!-- form -->
+      <label for="eid">Eid</label>
+      <input type="text" id="eid" name="id" required>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <label for="phone">Phone:</label>
+      <input type="text" id="phone" name="phone" required>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <!-- button to submit for add -->
+      <button type="submit">Submit</button>
+    </form>
+
+    <!-- Success message element -->
+    <div id="success-message" style="display:none">Data posted successfully</div>
+
     <script>
-      function getValue(){
-        var t = document.getElementById('searchid').value;
-        if (t == '*'){
-          fetch('http://127.0.0.1:5000/employee?eid=*')
+      // This is the search and show data
+      function searchEmployee(){
+        const search = document.getElementById('searchid').value;
+        if (search == '*') {
+        // pull the data from api
+        fetch('http://127.0.0.1:5000/employee?eid=*')
           .then(response => response.json())
           .then(data => {
             const employeeList = document.getElementById('employee-list');
-            employeeList.innerHTML = '';
+            employeeList.innerHTML = ''; // Clean all data table after add the new data
             data.forEach(employee => {
               const tr = document.createElement('tr');
               tr.innerHTML = `
@@ -39,184 +73,116 @@
                 <td>${employee.name}</td>
                 <td>${employee.phone}</td>
                 <td>${employee.email}</td>
+                <td><button>Edit</button><button>Delete</button></td>
               `;
               employeeList.appendChild(tr);
             });
           })
-          .catch(error => console.error(error));
-          
-        } 
-        else if (t =='c001'){
+            .catch(error => console.error(error));
+    } else {
+      // pull the data from api for the specific eid
+      fetch(`http://127.0.0.1:5000/employee?eid=${search}`)
+        .then(response => response.json())
+            .then(data => {
+              const employee = data;
+              const employeeList = document.getElementById('employee-list');
+              employeeList.innerHTML ='';// Clean all data table after add the new data
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${employee.eid}</td>
+                <td>${employee.name}</td>
+                <td>${employee.phone}</td>
+                <td>${employee.email}</td>
+                <td><button>Edit</button><button>Delete</button></td>
+              `;
+              employeeList.appendChild(tr);
+            })
+            .catch(error => console.error(error));
+            } 
+  }
+      // Add data
 
-          fetch('http://127.0.0.1:5000/employee?eid=c001')
+      const Show_Form = document.getElementById('show-from-to-add');
+
+      // Get a reference to the form element
+      const form = document.getElementById('from-to-add');
+
+      const isFormVisible = localStorage.getItem('isFormVisible') === 'true';
+      if (isFormVisible) {
+        form.style.display = 'block';
+      } else{
+        form.style.display='none';
+      }
+      Show_Form.addEventListener('click', event=>{
+        form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        localStorage.setItem('isFormVisible', form.style.display === 'block');
+      });
+      // Handle form submission
+      form.addEventListener('submit', event => {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Define the API endpoint URL
+        const apiEndpoint = 'http://127.0.0.1:5000/employee?eid=*';
+
+        // Define the data to post to the API as a JavaScript object
+        const postData = {
+          eid: form.elements.eid.value,
+          name: form.elements.name.value,
+          phone: form.elements.phone.value,
+          email: form.elements.email.value
+        };
+
+        // Define the options for the fetch() function
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
+        };
+
+        // Send the HTTP POST request to the API endpoint using fetch()
+        fetch(apiEndpoint, options)
+          .then(response => {
+            if (response.ok) {
+              const successMessage = document.getElementById('success-message');
+              successMessage.style.display = 'block';
+              document.getElementById('form-to-add').reset();
+              setTimeout(function() { document.getElementById('success-message').style.display = 'none';}, 10);
+              return response.json();
+            } else {
+              throw new Error('Failed to post data to API.');
+            }
+          })
+          .then(data => {
+            console.log('Data posted to API:', data);
+            // Do something with the response data, if needed
+          })
+          .catch(error => {
+            console.error(error);
+            // Handle errors that occurred during the request
+          });
+      });
+
+            // Delete data
+      function deleteEmployee(eid) {
+        // Delete data from API
+        fetch(`http://127.0.0.1:5000/employee/${eid}`, {
+          method: 'DELETE'
+        })
           .then(response => response.json())
           .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
+            // Show success message
+            const successMessage = document.getElementById('success-message');
+            successMessage.innerHTML = 'Employee deleted successfully.';
+
+            // Hide success message after 2 seconds
+            setTimeout(() => {
+              successMessage.innerHTML = '';
+            }, 2000);
           })
           .catch(error => console.error(error));
-          } 
-          else if (t =='c002'){
-          fetch('http://127.0.0.1:5000/employee?eid=c002')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          } 
-          else if (t =='c003'){
-          fetch('http://127.0.0.1:5000/employee?eid=c003')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          } 
-          else if (t =='c004'){
-          fetch('http://127.0.0.1:5000/employee?eid=c004')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          }
-          else if (t =='c005'){
-          fetch('http://127.0.0.1:5000/employee?eid=c005')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          } 
-          else if (t =='c006'){
-          fetch('http://127.0.0.1:5000/employee?eid=c006')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          } 
-          else if (t =='c007'){
-          fetch('http://127.0.0.1:5000/employee?eid=c007')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          } 
-          else if (t =='c008'){
-          fetch('http://127.0.0.1:5000/employee?eid=c008')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          } 
-          else if (t =='c009'){
-          fetch('http://127.0.0.1:5000/employee?eid=c009')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          } 
-          else {
-          fetch('http://127.0.0.1:5000/employee?eid=c0010')
-          .then(response => response.json())
-          .then(data => {
-            const employee = data;
-            const employeeList = document.getElementById('employee-list');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${employee.eid}</td>
-              <td>${employee.name}</td>
-              <td>${employee.phone}</td>
-              <td>${employee.email}</td>
-            `;
-            employeeList.appendChild(tr);
-          })
-          .catch(error => console.error(error));
-          }
       }
     </script>
 </body>
