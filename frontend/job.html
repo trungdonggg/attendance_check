@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job</title>
+</head>
+<body>
+    <button type="button">
+      <a href="/frontend/main.html">Home</a>
+    </button>
+
+
+    <h1>Job Data</h1>
+
+          <!-- this is the search form -->
+    <form>
+      Search: <input type="text" id="searchid" placeholder="Job ID..">
+    <!-- this is button to Find -->
+      <button type="button" onclick="searchJob()">Find</button>
+    
+    </form>
+
+          <!-- This is the job table -->
+    <table id="job-table">
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Title</th>
+          <th>Based Salary</th>
+          <th>From Hour</th>
+          <th>To Hour</th>
+          <th>Late Coefficient</th>
+          <th>Overtime Coefficient</th>
+          <th>Option</th>
+        </tr>
+      </thead>
+      <tbody id="job-list"></tbody>
+      <!-- this is the button to SHOW FORM for add job -->
+      <button id="show-form-to-add-job">Add</button>
+    </table>
+
+          <!-- This is the form -->
+    <form id="from-to-add">
+      <!-- form -->
+      <label for="jid">jid</label>
+      <input type="text" id="jid" name="id" required>
+
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="tilte" required>
+
+      <label for="based_salary">Based Salary:</label>
+      <input type="decimal" id="based_salary" name="based_salary" required>
+
+      <label for="from_hour">From Hour:</label>
+      <input type="time" id="from_hour" name="from_hour" required>
+
+      <label for="to_hour">To Hour:</label>
+      <input type="time" id="to_hour" name="to_hour" required>
+
+      <label for="late_coefficient">Late Coefficient:</label>
+      <input type="float" id="late_coefficient" name="late_coefficient" required>
+
+      <label for="overtime_coefficient">Overtime Coefficient:</label>
+      <input type="float" id="overtime_coefficient" name="overtime_coefficient" required>
+      <!-- button to submit for add -->
+      <button type="submit">Submit</button>
+    </form>
+
+    <!-- Success message element -->
+    <div id="success-message" style="display:none">Data posted successfully</div>
+
+    <script>
+      // This is the search and show data
+      function searchJob(){
+        const search = document.getElementById('searchid').value;
+        if (search == '*') {
+        // pull the data from api
+        fetch('http://127.0.0.1:5000/job?jid=*')
+          .then(response => response.json())
+          .then(data => {
+            const jobList = document.getElementById('job-list');
+            jobList.innerHTML = ''; // Clean all data table after add the new data
+            data.forEach(job => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${job.jid}</td>
+                <td>${job.title}</td>
+                <td>${job.based_salary}</td>
+                <td>${job.from_hour}</td>
+                <td>${job.to_hour}</td>
+                <td>${job.late_coefficient}</td>
+                <td>${job.overtime_coefficient}</td>
+                <td><button>Edit</button><button>Delete</button></td>
+              `;
+              jobList.appendChild(tr);
+            });
+          })
+            .catch(error => console.error(error));
+    } else {
+      // pull the data from api for the specific jid
+      fetch(`http://127.0.0.1:5000/job?jid=${search}`)
+        .then(response => response.json())
+            .then(data => {
+              const job = data;
+              const jobList = document.getElementById('job-list');
+              jobList.innerHTML ='';// Clean all data table after add the new data
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${job.jid}</td>
+                <td>${job.title}</td>
+                <td>${job.based_salary}</td>
+                <td>${job.from_hour}</td>
+                <td>${job.to_hour}</td>
+                <td>${job.late_coefficient}</td>
+                <td>${job.overtime_coefficient}</td>
+                <td><button>Edit</button><button>Delete</button></td>
+              `;
+              jobList.appendChild(tr);
+            })
+            .catch(error => console.error(error));
+            } 
+  }
+      // Add data
+
+      const Show_Form = document.getElementById('show-form-to-add-job');
+
+      // Get a reference to the form element
+      const form = document.getElementById('from-to-add');
+
+      const isFormVisible = localStorage.getItem('isFormVisible') === 'true';
+      if (isFormVisible) {
+        form.style.display = 'block';
+      } else{
+        form.style.display='none';
+      }
+      Show_Form.addEventListener('click', event=>{
+        form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+        localStorage.setItem('isFormVisible', form.style.display === 'block');
+      });
+      // Handle form submission
+      form.addEventListener('submit', event => {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Define the API endpoint URL
+        const apiEndpoint = 'http://127.0.0.1:5000/job?jid=*';
+
+        // Define the data to post to the API as a JavaScript object
+        const postData = {
+          jid: form.elements.jid.value,
+          title: form.elements.title.value,
+          based_salary: form.elements.based_salary.value,
+          from_hour: form.elements.from_hour.value,
+          to_hour: form.elements.to_hour.value,
+          late_coefficient: form.elements.late_coefficient.value,
+          overtime_coefficient: form.elements.overtime_coefficient.value
+        };
+
+        // Define the options for the fetch() function
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
+        };
+
+        // Send the HTTP POST request to the API endpoint using fetch()
+        fetch(apiEndpoint, options)
+          .then(response => {
+            if (response.ok) {
+              const successMessage = document.getElementById('success-message');
+              successMessage.style.display = 'block';
+              document.getElementById('form-to-add').reset();
+              setTimeout(function() { document.getElementById('success-message').style.display = 'none';}, 10);
+              return response.json();
+            } else {
+              throw new Error('Failed to post data to API.');
+            }
+          })
+          .then(data => {
+            console.log('Data posted to API:', data);
+            // Do something with the response data, if needed
+          })
+          .catch(error => {
+            console.error(error);
+            // Handle errors that occurred during the request
+          });
+      });
+
+            // Delete data
+      function deletejob(jid) {
+        // Delete data from API
+        fetch(`http://127.0.0.1:5000/job/${jid}`, {
+          method: 'DELETE'
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Show success message
+            const successMessage = document.getElementById('success-message');
+            successMessage.innerHTML = 'job deleted successfully.';
+
+            // Hide success message after 2 seconds
+            setTimeout(() => {
+              successMessage.innerHTML = '';
+            }, 2000);
+          })
+          .catch(error => console.error(error));
+      }
+    </script>
+</body>
+</html>
