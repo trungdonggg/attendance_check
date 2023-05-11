@@ -6,19 +6,20 @@ from classes.attendant import Attendance
 from classes.employee import Employee
 from classes.position import Position
 import pymysql
-
+from flask_cors import CORS
 from utils import *
 
 app = Flask(__name__)
-api = Api(app)
 
+api = Api(app)
+cors = CORS(app)
 conf = read_config()
 
 connection = pymysql.connect(
-    host=conf['DATABASE_01']['host'],
-    user=conf['DATABASE_01']['user'],
-    password=conf['DATABASE_01']['password'],
-    db=conf['DATABASE_01']['db'])
+    host=conf['DATABASE_00']['host'],
+    user=conf['DATABASE_00']['user'],
+    password=conf['DATABASE_00']['password'],
+    db=conf['DATABASE_00']['db'])
 
 
 api.add_resource(Employee, '/employee', resource_class_kwargs={"connection":connection})
