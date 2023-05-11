@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from attendance.utils import command_format
+from utils import command_format
 
 
 class Employee(Resource):
@@ -56,20 +56,20 @@ class Employee(Resource):
             return {"status":"error"}
 
     def delete(self):
-        if request.is_json:
-            # convert to json
-            data = request.get_json(force=True)
-            eid = data['eid']
-            with self.connection.cursor() as cursor:
-                sql_delete = "DELETE FROM `tbl_employee` WHERE `eid`=%s"
-                # Execute the query
-                cursor.execute(sql_delete, eid)
-                # the connection is not autocommited by default. So we must commit to save our changes.
-                self.connection.commit()
-            return {"status": "success"}, 200
-        else:
-            return {"status":"error"}
-
+            if request.is_json:
+                data = request.get_json()
+                eid = data.get('eid')
+                if eid is not None:
+                    with self.connection.cursor() as cursor:
+                        sql_delete = "DELETE FROM `tbl_employee` WHERE `eid`=%s"
+                        cursor.execute(sql_delete, eid)
+                        self.connection.commit()
+                    return {"status": "success"}, 200
+                else:
+                    return {"error": "eid is required"}, 400
+            else:
+                return {"error": "invalid request body"}, 400
+        
     def put(self):
         if request.is_json:
             # convert to json
