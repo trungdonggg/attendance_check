@@ -74,9 +74,9 @@ class Employee(Resource):
         if request.is_json:
             # convert to json
             data = request.get_json(force=True)
-            sql_put = "update tbl_employee set {} where {};"
+            sql_put = "UPDATE tbl_employee SET `name`=%(name)s, `phone`=%(phone)s, `email`=%(email)s WHERE `eid`=%(eid)s;"
             with self.connection.cursor() as cursor:
-                cursor.execute(command_format(data, sql_put))
+                cursor.execute(sql_put, data)
                 self.connection.commit()
             return {'status':'success'}, 200
         else:
