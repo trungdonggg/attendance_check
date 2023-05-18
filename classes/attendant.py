@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from utils import myconverter
+from cs311.attendance.utils import myconverter
 
 
 class Attendance(Resource):
