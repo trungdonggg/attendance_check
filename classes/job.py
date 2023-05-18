@@ -19,7 +19,7 @@ class Job(Resource):
                         data = {
                             'jid': i[0],
                             'title': i[1],
-                            'based_salary': str(i[2]),
+                            'based_salary': i[2],
                             'from_hour': str(i[3]),
                             'to_hour': str(i[4]),
                             'late_coefficient': i[5],
@@ -36,7 +36,7 @@ class Job(Resource):
                     data = {
                         'jid': i[0],
                         'title': i[1],
-                        'based_salary': str(i[2]),
+                        'based_salary': i[2],
                         'from_hour': str(i[3]),
                         'to_hour': str(i[4]),
                         'late_coefficient': i[5],
@@ -80,9 +80,12 @@ class Job(Resource):
         if request.is_json:
             # convert to json
             data = request.get_json(force=True)
-            sql_put = "update tbl_job set {} where {};"
+            sql_put = "UPDATE tbl_job SET `title`=%s, `based_salary`=%s, `from_hour`=%s, `to_hour`=%s, `late_coefficient`=%s, `overtime_coefficient`=%s WHERE `jid`=%s;"
             with self.connection.cursor() as cursor:
-                cursor.execute(command_format(data, sql_put))
+                cursor.execute(sql_put, (
+                    data['title'], data['basedsalary'], data['fromhour'], data['tohour'], data['latecoefficient'],
+                    data['overtimecoefficient'], data['jid']
+                ))
                 self.connection.commit()
             return {'status':'success'}, 200
         else:
