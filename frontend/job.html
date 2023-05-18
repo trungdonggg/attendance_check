@@ -44,14 +44,14 @@
           <!-- This is the form -->
     <form id="from-to-add">
       <!-- form -->
-      <label for="jid">jid</label>
+      <label for="jid">Job Id</label>
       <input type="text" id="jid" name="id" required>
 
       <label for="title">Title:</label>
       <input type="text" id="title" name="tilte" required>
 
       <label for="based_salary">Based Salary:</label>
-      <input type="decimal" id="based_salary" name="based_salary" required>
+      <input type="float" id="based_salary" name="based_salary" required>
 
       <label for="from_hour">From Hour:</label>
       <input type="time" id="from_hour" name="from_hour" required>
@@ -67,6 +67,38 @@
       <!-- button to submit for add -->
       <button type="submit">Submit</button>
     </form>
+
+    <div id="edit-form-container" style="display: none;">
+      <form id="form_to_put">
+
+        <label for="titleput">Title:</label>
+        <input type="text" id="titleput" name="tilte" required>
+  
+        <label for="based_salary_put">Based Salary:</label>
+        <input type="float" id="based_salary_put" name="based_salary" required>
+  
+        <label for="from_hour_put">From Hour:</label>
+        <input type="time" id="from_hour_put" name="from_hour" required>
+  
+        <label for="to_hour_put">To Hour:</label>
+        <input type="time" id="to_hour_put" name="to_hour" required>
+  
+        <label for="late_coefficient_put">Late Coefficient:</label>
+        <input type="float" id="late_coefficient_put" name="late_coefficient" required>
+  
+        <label for="overtime_coefficient_put">Overtime Coefficient:</label>
+        <input type="float" id="overtime_coefficient_put" name="overtime_coefficient" required>
+        <!-- button to submit for add -->
+        <button type="submit">Submit</button>
+        <!-- Success message element -->
+        <div id="put-success-message" style="display:none">Data updated successfully</div>
+      </div>
+
+      <!-- Success message element -->
+      <div id="put-success-message" style="display:none">Data updated successfully</div>
+      </form>
+    </div>
+
 
     <!-- Success message element -->
     <div id="success-message" style="display:none">Data posted successfully</div>
@@ -87,14 +119,14 @@
             data.forEach(job => {
               const tr = document.createElement('tr');
               tr.innerHTML = `
-                <td>${job.jid}</td>
-                <td>${job.title}</td>
-                <td>${job.based_salary}</td>
-                <td>${job.from_hour}</td>
-                <td>${job.to_hour}</td>
-                <td>${job.late_coefficient}</td>
-                <td>${job.overtime_coefficient}</td>
-                <td><button>Edit</button><button data-jid="${job.jid}">Delete</button></td>
+                <td style="text-align:center;">${job.jid}</td>
+                <td style="text-align:center;">${job.title}</td>
+                <td style="text-align:center;">${job.based_salary}</td>
+                <td style="text-align:center;">${job.from_hour}</td>
+                <td style="text-align:center;">${job.to_hour}</td>
+                <td style="text-align:center;">${job.late_coefficient}</td>
+                <td style="text-align:center;">${job.overtime_coefficient}</td>
+                <td><button onclick="showEditForm('${job.jid}')">Edit</button><button data-jid="${job.jid}">Delete</button></td>
               `;
               jobList.appendChild(tr);
             });
@@ -110,14 +142,14 @@
               jobList.innerHTML ='';// Clean all data table after add the new data
               const tr = document.createElement('tr');
               tr.innerHTML = `
-                <td>${job.jid}</td>
-                <td>${job.title}</td>
-                <td>${job.based_salary}</td>
-                <td>${job.from_hour}</td>
-                <td>${job.to_hour}</td>
-                <td>${job.late_coefficient}</td>
-                <td>${job.overtime_coefficient}</td>
-                <td><button>Edit</button><button data-jid="${job.jid}">Delete</button></td>
+                <td style="text-align:center;">${job.jid}</td>
+                <td style="text-align:center;">${job.title}</td>
+                <td style="text-align:center;">${job.based_salary}</td>
+                <td style="text-align:center;">${job.from_hour}</td>
+                <td style="text-align:center;">${job.to_hour}</td>
+                <td style="text-align:center;">${job.late_coefficient}</td>
+                <td style="text-align:center;">${job.overtime_coefficient}</td>
+                <td><button onclick="showEditForm('${job.jid}')">Edit</button><button data-jid="${job.jid}">Delete</button></td>
               `;
               jobList.appendChild(tr);
             })
@@ -130,7 +162,7 @@
 
       // Get a reference to the form element
       const form = document.getElementById('from-to-add');
-
+      const successMessage = document.getElementById('success-message');
       const isFormVisible = localStorage.getItem('isFormVisible') === 'true';
       if (isFormVisible) {
         form.style.display = 'block';
@@ -173,14 +205,16 @@
         fetch(apiEndpoint, options)
           .then(response => {
             if (response.ok) {
-              const successMessage = document.getElementById('success-message');
               successMessage.style.display = 'block';
-              document.getElementById('form-to-add').reset();
-              setTimeout(function() { document.getElementById('success-message').style.display = 'none';}, 10);
-              return response.json();
-            } else {
-              throw new Error('Failed to post data to API.');
-            }
+                form.reset();
+                setTimeout(() => {
+                  successMessage.style.display = 'none';
+                  form.style.display ='none';
+                }, 2500);
+                return response.json();
+              } else {
+                throw new Error('Failed to post data to API.');
+              }
           })
           .then(data => {
             console.log('Data posted to API:', data);
@@ -228,6 +262,85 @@
         }
       });
 
+
+      // PUT Data
+      function showEditForm(jobId) {
+        const formContainer = document.getElementById('edit-form-container');
+        if (formContainer.style.display === "none" || formContainer.style.display === ''){
+          formContainer.style.display = 'block'; // Show the form container
+          // Populate the form with the job data
+          const titleInput = document.getElementById('titleput');
+          const basedsalaryInput = document.getElementById('based_salary_put');
+          const fromhourInput = document.getElementById('from_hour_put');
+          const tohourInput = document.getElementById('to_hour_put');
+          const latecoefficientInput = document.getElementById('late_coefficient_put');
+          const overtimecoefficientInput = document.getElementById('overtime_coefficient_put');
+
+          // Fetch the job data from the API
+          fetch(`http://127.0.0.1:5000/job?jid=${jobId}`)
+            .then(response => response.json())
+            .then(data => {
+              titleInput.value = data.title;
+              basedsalaryInput.value = data.based_salary;
+              fromhourInput.value = data.from_hour;
+              tohourInput.value = data.to_hour;
+              latecoefficientInput.value = data.late_coefficient;
+              overtimecoefficientInput.value = data.overtime_coefficient;
+            })
+            .catch(error => console.error(error));
+        } else{
+          formContainer.style.display = 'none';
+        }
+        
+        const form = document.getElementById('form_to_put');
+        const successMessage = document.getElementById('put-success-message');
+        
+        form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Get the job ID
+        // const jobId = document.getElementById('searchid').value;
+
+        // Get the form data
+        const title = document.getElementById('titleput').value;
+        const basedsalary = document.getElementById('based_salary_put').value;
+        const fromhour = document.getElementById('from_hour_put').value;
+        const tohour = document.getElementById('to_hour_put').value;
+        const latecoefficient = document.getElementById('late_coefficient_put').value;
+        const overtimecoefficient = document.getElementById('overtime_coefficient_put').value;
+        
+        const data = {
+          jid: jobId,
+          title: title,
+          basedsalary: basedsalary,
+          fromhour: fromhour,
+          tohour:tohour,
+          latecoefficient:latecoefficient,
+          overtimecoefficient:overtimecoefficient
+        };
+
+        // Send the PUT request to update the job data
+        fetch(`http://127.0.0.1:5000/job`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Updated data:', data);
+            successMessage.style.display = 'block'; // Show the success message
+            form.reset(); // Reset the form
+            setTimeout(() => {
+              formContainer.style.display ='none';
+              successMessage.style.display = 'none';
+          }, 2500);
+            
+          })
+          .catch(error => console.error(error));
+      });
+      }
     </script>
 </body>
 </html>
