@@ -49,8 +49,24 @@
       <!-- button to submit for add -->
       <button type="submit">Submit</button>
           <!-- Success message element -->
-      <div id="success-message" style="display:none">Data posted successfully</div>
+      <div id="success-message" style="display:none">Data posted successfully!<br>Please Reload or Find again</div>
     </form>
+
+    <div id="edit-form-container" style="display: none;">
+      <form id="form_to_put">
+
+      <label for="nameput">Name:</label>
+      <input type="text" id="nameput" name="name" required>
+      <label for="phoneput">Phone:</label>
+      <input type="text" id="phoneput" name="phone" required>
+      <label for="emailput">Email:</label>
+      <input type="email" id="emailput" name="email" required>
+      <!-- button to submit for add -->
+      <button type="submit">Submit</button>
+      <!-- Success message element -->
+      <div id="put-success-message" style="display:none">Data updated successfully</div>
+      </form>
+    </div>
 
     <!-- Delete success message -->
     <div id="delete-success-message" style="display:none">Data delete successfully</div>
@@ -58,50 +74,49 @@
           // SEARCH and SHOW Data
 
 
-      function searchEmployee(){
+        function searchEmployee(){
         const search = document.getElementById('searchid').value;
-        if (search == '*') {
-        // pull the data from api
-        fetch('http://127.0.0.1:5000/employee?eid=*')
-          .then(response => response.json())
-          .then(data => {
-            const employeeList = document.getElementById('employee-list');
-            employeeList.innerHTML = ''; // Clean all data table after add the new data
-            data.forEach(employee => {
+        if (search === '*') {
+        // pull the data from the API
+          fetch('http://127.0.0.1:5000/employee?eid=*')
+            .then(response => response.json())
+            .then(data => {
+              const employeeList = document.getElementById('employee-list');
+              employeeList.innerHTML = ''; // Clear all data table before adding new data
+              data.forEach(employee => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                  <td style="text-align:center;">${employee.eid}</td>
+                  <td style="text-align:center;">${employee.name}</td>
+                  <td style="text-align:center;">${employee.phone}</td>
+                  <td style="text-align:center;">${employee.email}</td>
+                  <td><button onclick="showEditForm('${employee.eid}')">Edit</button><button data-eid="${employee.eid}">Delete</button></td>
+                `;
+                employeeList.appendChild(tr);
+              });
+            })
+            .catch(error => console.error(error));
+        } else {
+          // pull the data from the API for the specific eid
+          fetch(`http://127.0.0.1:5000/employee?eid=${search}`)
+            .then(response => response.json())
+            .then(data => {
+              const employee = data;
+              const employeeList = document.getElementById('employee-list');
+              employeeList.innerHTML = ''; // Clear all data table before adding new data
               const tr = document.createElement('tr');
               tr.innerHTML = `
-                <td>${employee.eid}</td>
-                <td>${employee.name}</td>
-                <td>${employee.phone}</td>
-                <td>${employee.email}</td>
-                <td><button>Edit</button><button data-eid="${employee.eid}">Delete</button></td>
+                <td style="text-align:center;">${employee.eid}</td>
+                <td style="text-align:center;">${employee.name}</td>
+                <td style="text-align:center;">${employee.phone}</td>
+                <td style="text-align:center;">${employee.email}</td>
+                <td><button onclick="showEditForm('${employee.eid}')">Edit</button><button data-eid="${employee.eid}">Delete</button></td>
               `;
               employeeList.appendChild(tr);
-            });
-          })
+            })
             .catch(error => console.error(error));
-          } else {
-            // pull the data from api for the specific eid
-            fetch(`http://127.0.0.1:5000/employee?eid=${search}`)
-              .then(response => response.json())
-                  .then(data => {
-                    const employee = data;
-                    const employeeList = document.getElementById('employee-list');
-                    employeeList.innerHTML ='';// Clean all data table after add the new data
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                      <td>${employee.eid}</td>
-                      <td>${employee.name}</td>
-                      <td>${employee.phone}</td>
-                      <td>${employee.email}</td>
-                      <td><button>Edit</button><button data-eid="${employee.eid}">Delete</button></td>
-                    `;
-                    employeeList.appendChild(tr);
-                  })
-                  .catch(error => console.error(error));
-                  } 
-  }
-
+        }
+      }
           // ADD Data
 
         const showFormButton = document.getElementById('show-form-to-add-employee');
@@ -142,7 +157,8 @@
                 form.reset();
                 setTimeout(() => {
                   successMessage.style.display = 'none';
-                }, 2000);
+                  form.style.display ='none';
+                }, 2500);
                 return response.json();
               } else {
                 throw new Error('Failed to post data to API.');
@@ -191,12 +207,76 @@
           successMessage.style.display = 'block';
           setTimeout(() => {
             successMessage.style.display = 'none';
-          }, 2000);
+          }, 2500);
         }
       });
 
-          // PUT Data 
+        // PUT Data
+        function showEditForm(employeeId) {
+        const formContainer = document.getElementById('edit-form-container');
+        if (formContainer.style.display === "none" || formContainer.style.display === ''){
+          formContainer.style.display = 'block'; // Show the form container
+          // Populate the form with the employee data
+          const nameInput = document.getElementById('nameput');
+          const phoneInput = document.getElementById('phoneput');
+          const emailInput = document.getElementById('emailput');
+
+          // Fetch the employee data from the API
+          fetch(`http://127.0.0.1:5000/employee?eid=${employeeId}`)
+            .then(response => response.json())
+            .then(data => {
+              nameInput.value = data.name;
+              phoneInput.value = data.phone;
+              emailInput.value = data.email;
+            })
+            .catch(error => console.error(error));
+        } else{
+          formContainer.style.display = 'none';
+        }
         
+        const form = document.getElementById('form_to_put');
+        const successMessage = document.getElementById('put-success-message');
+        
+        form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Get the employee ID
+        // const employeeId = document.getElementById('searchid').value;
+
+        // Get the form data
+        const name = document.getElementById('nameput').value;
+        const phone = document.getElementById('phoneput').value;
+        const email = document.getElementById('emailput').value;
+        
+        const data = {
+          eid: employeeId,
+          name: name,
+          phone: phone,
+          email: email
+        };
+
+        // Send the PUT request to update the employee data
+        fetch(`http://127.0.0.1:5000/employee`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Updated data:', data);
+            successMessage.style.display = 'block'; // Show the success message
+            form.reset(); // Reset the form
+            setTimeout(() => {
+              formContainer.style.display ='none';
+              successMessage.style.display = 'none';
+          }, 2500);
+            
+          })
+          .catch(error => console.error(error));
+      });
+      }
 
     </script>
 </body>
