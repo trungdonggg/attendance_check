@@ -36,7 +36,7 @@ class Payment(Resource):
                 val = fromdate.iloc[idx]
 
                 print (frdate)
-                print (val)
+                print (val[0])
 
 
 
