@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance</title>
+</head>
+<body>
+    <button type="button">
+      <a href="/frontend/main.html">Home</a>
+    </button>
+
+    <h1>Attendance Data</h1>
+          <!-- this is the search form -->
+    <form>
+      Search: <input type="text" id="searchid" placeholder="Employee ID..">
+    <!-- this is button to Find -->
+      <button type="button" onclick="searchattendance()">Find</button>
+    </form>
+
+          <!-- This is the attendance table -->
+    <table id="attendance-table">
+      <thead>
+        <tr>
+          <th>Employee ID</th>
+          <th>Clock In</th>
+          <th>Clock out</th>
+          <th>Option</th>
+        </tr>
+      </thead>
+      <tbody id="attendance-list"></tbody>
+      <!-- this is the button to SHOW FORM for add attendance -->
+      <button id="show-form-to-add-attendance">Add</button>
+    </table>
+    <div id="get-all-data" style="display: none;">Can't search all! <br> Please search with Individual Employee ID</div>
+
+  <script>
+          // SEARCH and SHOW Data
+        function searchattendance(){
+        const search = document.getElementById('searchid').value;
+        if (search === '*') {
+          const showGetdata = document.getElementById('get-all-data');
+          showGetdata.style.display = "block";
+          setTimeout(()=>{
+            showGetdata.style.display = "none";
+          },2500)
+        } else {
+          // pull the data from the API for the specific eid
+          fetch(`http://127.0.0.1:5000/attendance?eid=${search}`)
+            .then(response => response.json())
+            .then(data => {
+              const attendance = data;
+              const attendanceList = document.getElementById('attendance-list');
+              attendanceList.innerHTML = ''; // Clear all data table before adding new data
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                  <td style="text-align:center;">${attendance[0].eid}</td>
+                  <td>${attendance[0].clock_in}</td>
+                  <td>${attendance[0].clock_out}</td>
+                  <td><button onclick="showEditForm('${attendance.eid}')">Edit</button><button data-eid="${attendance.eid}">Delete</button></td>
+                `;
+              attendanceList.appendChild(tr);
+              console.log(attendanceList);
+            })
+            .catch(error => console.error(error));
+        }
+      }
+    </script>
+</body>
+</html>
