@@ -29,8 +29,18 @@ class Payment(Resource):
                 cursor.execute(sql_1.format(eid))
                 fromdate = pandas.DataFrame(cursor.fetchall())
                 fromdate[0] = pandas.to_datetime(fromdate[0], format='%Y%m%d')
-                # fromdate = fromdate.loc[(fromdate[0] >= s1) & (fromdate[0] <= s2)]
-                print (fromdate)
+                frdate = fromdate.loc[(fromdate[0] >= s1) & (fromdate[0] < s2)]
+
+
+                idx = fromdate[fromdate[0] < s1].index.tolist()[-1]
+                val = fromdate.iloc[idx]
+
+                print (frdate)
+                print (val[0])
+
+
+
+
 
 
 
