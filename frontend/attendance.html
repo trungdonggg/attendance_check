@@ -26,7 +26,6 @@
           <th>Employee ID</th>
           <th>Clock In</th>
           <th>Clock out</th>
-          <th>Option</th>
         </tr>
       </thead>
       <tbody id="attendance-list"></tbody>
@@ -35,6 +34,13 @@
     </table>
     <div id="get-all-data" style="display: none;">Can't search all! <br> Please search with Individual Employee ID</div>
 
+      <!-- This is the form -->
+      <form id="from-to-add">
+        <button onclick="checkin()">Check In</button>
+        <button onclick="checkout()">Check Out</button>
+            <!-- Success message element -->
+        <div id="success-message" style="display:none">Data posted successfully!<br>Please Reload or Find again</div>
+      </form>
   <script>
           // SEARCH and SHOW Data
         function searchattendance(){
@@ -50,21 +56,104 @@
           fetch(`http://127.0.0.1:5000/attendance?eid=${search}`)
             .then(response => response.json())
             .then(data => {
-              const attendance = data;
               const attendanceList = document.getElementById('attendance-list');
               attendanceList.innerHTML = ''; // Clear all data table before adding new data
-              const tr = document.createElement('tr');
-              tr.innerHTML = `
-                  <td style="text-align:center;">${attendance[0].eid}</td>
-                  <td>${attendance[0].clock_in}</td>
-                  <td>${attendance[0].clock_out}</td>
-                  <td><button onclick="showEditForm('${attendance.eid}')">Edit</button><button data-eid="${attendance.eid}">Delete</button></td>
+              data.forEach(attendance=>{
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                  <td style="text-align:center;">${attendance.eid}</td>
+                  <td style="text-align:center;">${attendance.clock_in}</td>
+                  <td style="text-align:center;">${attendance.clock_out}</td>
                 `;
               attendanceList.appendChild(tr);
-              console.log(attendanceList);
-            })
+              })
+              
+            })              
             .catch(error => console.error(error));
         }
+      }
+
+      function checkin(){
+        const search = document.getElementById('searchid').value;
+        const postData ={
+          eid:search
+        }
+        // Set the API endpoint URL
+      const apiEndpoint = 'http://127.0.0.1:5000/attendance';
+
+    // Create the request options
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postData)
+    };
+
+    // Send the POST request to the API
+    fetch(apiEndpoint, options)
+      .then(response => {
+        if (response.ok) {
+          // Handle the successful response
+          console.log('Data posted successfully!');
+          // Reset the form
+          form.reset();
+          // Display a success message
+          const successMessage = document.getElementById('success-message');
+          successMessage.style.display = 'block';
+          setTimeout(() => {
+            successMessage.style.display = 'none';
+          }, 2500);
+        } else {
+          throw new Error('Failed to post data to API.');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        // Handle errors that occurred during the request
+      });
+      }
+
+      // check OUT
+      function checkout(){
+        const search = document.getElementById('searchid').value;
+        const postData ={
+          eid:search
+        }
+        // Set the API endpoint URL
+      const apiEndpoint = 'http://127.0.0.1:5000/attendance';
+
+    // Create the request options
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postData)
+    };
+
+    // Send the POST request to the API
+    fetch(apiEndpoint, options)
+      .then(response => {
+        if (response.ok) {
+          // Handle the successful response
+          console.log('Data posted successfully!');
+          // Reset the form
+          form.reset();
+          // Display a success message
+          const successMessage = document.getElementById('success-message');
+          successMessage.style.display = 'block';
+          setTimeout(() => {
+            successMessage.style.display = 'none';
+          }, 2500);
+        } else {
+          throw new Error('Failed to post data to API.');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        // Handle errors that occurred during the request
+      });
       }
     </script>
 </body>
