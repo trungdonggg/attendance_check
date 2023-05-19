@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from cs311.attendance.utils import myconverter
+from utils import myconverter
 
 
 class Attendance(Resource):
@@ -12,7 +12,7 @@ class Attendance(Resource):
             with self.connection.cursor() as cursor:
                     drive = []
                     sql = "SELECT * FROM `tbl_attendance` WHERE `eid`=%s"
-                    cursor.execute(sql, request.args['eid'])
+                    cursor.execute(sql, (request.args['eid'],))
                     result = cursor.fetchall()
                     for i in result:
                         data = {
