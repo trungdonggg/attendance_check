@@ -63,7 +63,6 @@ class Holiday(Resource):
                 sql_delete = "DELETE FROM `tbl_holiday` WHERE `jid`='{}' and `holiday_date`='{}'"
                 sql_delete = sql_delete.format(jid,holiday_date)
                 cursor.execute(sql_delete)
-                # the connection is not autocommited by default. So we must commit to save our changes.
                 self.connection.commit()
             return {"status": "success"}, 200
         else:
