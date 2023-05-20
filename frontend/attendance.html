@@ -29,17 +29,14 @@
         </tr>
       </thead>
       <tbody id="attendance-list"></tbody>
-      <!-- this is the button to SHOW FORM for add attendance -->
-      <button id="show-form-to-add-attendance">Add</button>
     </table>
     <div id="get-all-data" style="display: none;">Can't search all! <br> Please search with Individual Employee ID</div>
-
       <!-- This is the form -->
       <form id="from-to-add">
         <button onclick="checkin()">Check In</button>
         <button onclick="checkout()">Check Out</button>
             <!-- Success message element -->
-        <div id="success-message" style="display:none">Data posted successfully!<br>Please Reload or Find again</div>
+        <div id="success-message" style="display:none">Thanks</div>
       </form>
   <script>
           // SEARCH and SHOW Data
@@ -78,41 +75,37 @@
         const postData ={
           eid:search
         }
-        // Set the API endpoint URL
-      const apiEndpoint = 'http://127.0.0.1:5000/attendance';
+            // Set the API endpoint URL
+        const apiEndpoint = 'http://127.0.0.1:5000/attendance';
 
-    // Create the request options
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
-    };
+        // Create the request options
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
+        };
+        // Send the POST request to the API
+        fetch(apiEndpoint, options)
+          .then(response => {
+            if (response.ok) {
+              // Display a success message
 
-    // Send the POST request to the API
-    fetch(apiEndpoint, options)
-      .then(response => {
-        if (response.ok) {
-          // Handle the successful response
-          console.log('Data posted successfully!');
-          // Reset the form
-          form.reset();
-          // Display a success message
-          const successMessage = document.getElementById('success-message');
-          successMessage.style.display = 'block';
-          setTimeout(() => {
-            successMessage.style.display = 'none';
-          }, 2500);
-        } else {
-          throw new Error('Failed to post data to API.');
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        // Handle errors that occurred during the request
-      });
-      }
+              const successMessage = document.getElementById('success-message');
+              successMessage.style.display = 'block';
+              setTimeout(() => {
+                successMessage.style.display = 'none';
+              }, 2500);
+            } else {
+              throw new Error('Failed to post data to API.');
+            }
+          })
+          .catch(error => {
+            console.error(error);
+            // Handle errors that occurred during the request
+          });
+          }
 
       // check OUT
       function checkout(){
@@ -120,41 +113,37 @@
         const postData ={
           eid:search
         }
-        // Set the API endpoint URL
-      const apiEndpoint = 'http://127.0.0.1:5000/attendance';
+          // Set the API endpoint URL
+        const apiEndpoint = 'http://127.0.0.1:5000/attendance';
 
-    // Create the request options
-    const options = {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(postData)
-    };
+        // Create the request options
+        const options = {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
+        };
 
-    // Send the POST request to the API
-    fetch(apiEndpoint, options)
-      .then(response => {
-        if (response.ok) {
-          // Handle the successful response
-          console.log('Data posted successfully!');
-          // Reset the form
-          form.reset();
-          // Display a success message
-          const successMessage = document.getElementById('success-message');
-          successMessage.style.display = 'block';
-          setTimeout(() => {
-            successMessage.style.display = 'none';
-          }, 2500);
-        } else {
-          throw new Error('Failed to post data to API.');
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        // Handle errors that occurred during the request
-      });
-      }
+        // Send the POST request to the API
+        fetch(apiEndpoint, options)
+          .then(response => {
+            if (response.ok) {
+              // Display a success message
+              const successMessage = document.getElementById('success-message');
+              successMessage.style.display = 'block';
+              setTimeout(() => {
+                successMessage.style.display = 'none';
+              }, 2500);
+            } else {
+              throw new Error('Failed to post data to API.');
+            }
+          })
+          .catch(error => {
+            console.error(error);
+            // Handle errors that occurred during the request
+          });
+          }
     </script>
 </body>
 </html>
