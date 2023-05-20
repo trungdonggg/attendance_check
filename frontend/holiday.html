@@ -12,14 +12,13 @@
     </button>
 
     <h1>Holiday Data</h1>
-          <!-- this is the search form -->
+    <!-- Search form -->
     <form>
       Search: <input type="text" id="searchid" placeholder="Job ID..">
-    <!-- this is button to Find -->
       <button type="button" onclick="searchHoliday()">Find</button>
     </form>
 
-          <!-- This is the employee table -->
+    <!-- Holiday table -->
     <table id="holiday-table">
       <thead>
         <tr>
@@ -29,50 +28,131 @@
         </tr>
       </thead>
       <tbody id="holiday-list"></tbody>
+      <button id="show-form-to-add-holiday">Add</button>
+    </table>
 
-  <script>
-          // SEARCH and SHOW Data
+    <!-- Form to add holiday -->
+    <form id="form-to-add" style="display: none;">
+      <label for="jid">Job ID:</label>
+      <input type="text" id="jid" name="id" required>
+      <label for="holiday_date">Holiday Date:</label>
+      <input type="date" id="holiday_date" name="holiday" required>
+      <button type="submit">Submit</button>
+      <div id="success-message" style="display:none">Data posted successfully!<br>Please reload or find again.</div>
+    </form>
 
-
-        function searchHoliday(){
+    <script>
+      // Function to fetch and display holiday data
+      function searchHoliday() {
         const search = document.getElementById('searchid').value;
-        if (search === '*') {
-        // pull the data from the API
+        if (search ==='*'){
           fetch('http://127.0.0.1:5000/holiday?jid=*')
-            .then(response => response.json())
-            .then(data => {
-                const holidayList = document.getElementById('holiday-list');
-                holidayList.innerHTML = ''; // Clear all data table before adding new data
-                data.forEach(holiday => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                  <td style="text-align:center;">${holiday.jid}</td>
-                  <td style="text-align:center;">${holiday.holiday_date}</td>
-                  <td><button onclick="showEditForm('${holiday.jid}')">Edit</button><button data-eid="${holiday.jid}">Delete</button></td>
-                `;
-                holidayList.appendChild(tr);
-              });
-            })
-            .catch(error => console.error(error));
-        } else {
-          // pull the data from the API for the specific eid
-          fetch(`http://127.0.0.1:5000/holiday?jid=${search}`)
-            .then(response => response.json())
-            .then(data => {
-                const holidayList = document.getElementById('holiday-list');
-                holidayList.innerHTML = ''; // Clear all data table before adding new data
-                data.forEach(holiday => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                  <td style="text-align:center;">${holiday.jid}</td>
-                  <td style="text-align:center;">${holiday.holiday_date}</td>
-                  <td><button onclick="showEditForm('${holiday.jid}')">Edit</button><button data-eid="${holiday.jid}">Delete</button></td>
-                `;
-                holidayList.appendChild(tr);
-              });
-            })
-            .catch(error => console.error(error));
+          .then(response => response.json())
+          .then(data => {
+            const holidayList = document.getElementById('holiday-list');
+            holidayList.innerHTML = ''; // Clear all data table before adding new data
+            data.forEach(holiday => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td style="text-align:center;">${holiday.jid}</td>
+                <td style="text-align:center;">${holiday.holiday_date}</td>
+                <td><button onclick="deleteHoliday('${holiday.jid}', '${holiday.holiday_date}')">Delete</button></td>
+              `;
+              holidayList.appendChild(tr);
+            });
+          })
+          .catch(error => console.error(error));
+      } else{
+        fetch(`http://127.0.0.1:5000/holiday?jid=${search}`)
+          .then(response => response.json())
+          .then(data => {
+            const holidayList = document.getElementById('holiday-list');
+            holidayList.innerHTML = ''; // Clear all data table before adding new data
+            data.forEach(holiday => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td style="text-align:center;">${holiday.jid}</td>
+                <td style="text-align:center;">${holiday.holiday_date}</td>
+                <td><button onclick="deleteHoliday('${holiday.jid}', '${holiday.holiday_date}')">Delete</button></td>
+              `;
+              holidayList.appendChild(tr);
+            });
+          })
+          .catch(error => console.error(error));
+      }
         }
+        
+
+      // Function to add a holiday
+      const showFormButton = document.getElementById('show-form-to-add-holiday');
+      const form = document.getElementById('form-to-add');
+      const successMessage = document.getElementById('success-message');
+      showFormButton.addEventListener('click', event => {
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+      });
+
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const postData = {
+          jid: form.elements.jid.value,
+          holiday_date: form.elements.holiday_date.value,
+        };
+
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
+        };
+
+        fetch('http://127.0.0.1:5000/holiday', options)
+          .then(response => {
+            if (response.ok) {
+              successMessage.style.display = 'block';
+              form.reset();
+              setTimeout(() => {
+                successMessage.style.display = 'none';
+                form.style.display = 'none';
+                fetchHolidayData(); // Refresh the holiday data after successful addition
+              }, 2500);
+            } else {
+              throw new Error('Failed to post data to API.');
+            }
+          })
+          .catch(error => console.error(error));
+      });
+
+
+      // Function to delete a holiday
+        function deleteHoliday(jid, holidayDate) {
+        const formattedDate = new Date(holidayDate).toISOString().split('T')[0];
+
+        const postData = { jid: jid, holiday_date: formattedDate };
+
+        const options = {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
+        };
+
+        fetch('http://127.0.0.1:5000/holiday', options)
+          .then(response => {
+            if (response.ok) {
+              const successMessage = document.getElementById('success-message');
+              successMessage.style.display = 'block';
+              setTimeout(() => {
+                successMessage.style.display = 'none';
+                fetchHolidayData(); // Refresh the holiday data after successful deletion
+              }, 2500);
+            } else {
+              throw new Error('Failed to delete data from API.');
+            }
+          })
+          .catch(error => console.error(error));
       }
     </script>
 </body>
