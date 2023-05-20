@@ -7,170 +7,155 @@
   <title>Employee</title>
 </head>
 <body>
-    <button type="button">
-      <a href="/frontend/main.html">Home</a>
-    </button>
+  <button type="button">
+    <a href="/frontend/main.html">Home</a>
+  </button>
 
-    <h1>Employee Data</h1>
-          <!-- this is the search form -->
-    <form>
-      Search: <input type="text" id="searchid" placeholder="Employee ID..">
-    <!-- this is button to Find -->
-      <button type="button" onclick="searchEmployee()">Find</button>
-    </form>
+  <h1>Employee Data</h1>
 
-          <!-- This is the employee table -->
-    <table id="employee-table">
-      <thead>
-        <tr>
-          <th>Employee ID</th>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Email</th>
-          <th>Option</th>
-        </tr>
-      </thead>
-      <tbody id="employee-list"></tbody>
-      <!-- this is the button to SHOW FORM for add Employee -->
-      <button id="show-form-to-add-employee">Add</button>
-    </table>
+  <!-- Search form -->
+  <form>
+    Search: <input type="text" id="searchid" placeholder="Employee ID..">
+    <button type="button" onclick="searchEmployee()">Find</button>
+  </form>
 
-          <!-- This is the form -->
-    <form id="from-to-add" style="display: none;">
-      <!-- form -->
-      <label for="eid">Employee ID:</label>
-      <input type="text" id="eid" name="id" required>
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required>
-      <label for="phone">Phone:</label>
-      <input type="text" id="phone" name="phone" required>
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-      <!-- button to submit for add -->
-      <button type="submit">Submit</button>
-          <!-- Success message element -->
-      <div id="success-message" style="display:none">Data posted successfully!<br>Please Reload or Find again</div>
-    </form>
+  <!-- Employee table -->
+  <table id="employee-table" style="display: none;">
+    <thead>
+      <tr>
+        <th>Employee ID</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Option</th>
+      </tr>
+    </thead>
+    <tbody id="employee-list"></tbody>
+    <button id="show-form-to-add-employee">Add</button>
+  </table>
 
-    <div id="edit-form-container" style="display: none;">
-      <form id="form_to_put">
+  <!-- Form to add employee -->
+  <form id="form-to-add" style="display: none;">
+    <label for="eid">Employee ID:</label>
+    <input type="text" id="eid" name="id" required>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="phone">Phone:</label>
+    <input type="text" id="phone" name="phone" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    <button type="submit">Submit</button>
+  </form>
 
+  <!-- Form to edit employee -->
+  <div id="edit-form-container" style="display: none;">
+    <form id="form_to_put">
       <label for="nameput">Name:</label>
       <input type="text" id="nameput" name="name" required>
       <label for="phoneput">Phone:</label>
       <input type="text" id="phoneput" name="phone" required>
       <label for="emailput">Email:</label>
       <input type="email" id="emailput" name="email" required>
-      <!-- button to submit for add -->
       <button type="submit">Submit</button>
-      <!-- Success message element -->
-      <div id="put-success-message" style="display:none">Data updated successfully</div>
-      </form>
-    </div>
+    </form>
+  </div>
 
-    <!-- Delete success message -->
-    <div id="delete-success-message" style="display:none">Data delete successfully</div>
+  <!-- Success message elements -->
+  <div id="success-message" style="display:none">Data posted successfully!</div>
+  <div id="put-success-message" style="display:none">Data updated successfully!</div>
+  <div id="delete-success-message" style="display:none">Data deleted successfully!</div>
+
   <script>
-          // SEARCH and SHOW Data
+    let rememberedEmployeeId = ""; // Variable to store the remembered employee ID
 
+    function searchEmployee() {
+      const search = document.getElementById('searchid').value;
+      const employeetable = document.getElementById('employee-table');
 
-        function searchEmployee(){
-        const search = document.getElementById('searchid').value;
-        if (search === '*') {
-        // pull the data from the API
-          fetch('http://127.0.0.1:5000/employee?eid=*')
-            .then(response => response.json())
-            .then(data => {
-              const employeeList = document.getElementById('employee-list');
-              employeeList.innerHTML = ''; // Clear all data table before adding new data
-              data.forEach(employee => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                  <td style="text-align:center;">${employee.eid}</td>
-                  <td style="text-align:center;">${employee.name}</td>
-                  <td style="text-align:center;">${employee.phone}</td>
-                  <td style="text-align:center;">${employee.email}</td>
-                  <td><button onclick="showEditForm('${employee.eid}')">Edit</button><button data-eid="${employee.eid}">Delete</button></td>
-                `;
-                employeeList.appendChild(tr);
-              });
-            })
-            .catch(error => console.error(error));
-        } else {
-          // pull the data from the API for the specific eid
-          fetch(`http://127.0.0.1:5000/employee?eid=${search}`)
-            .then(response => response.json())
-            .then(data => {
-              const employee = data;
-              const employeeList = document.getElementById('employee-list');
-              employeeList.innerHTML = ''; // Clear all data table before adding new data
+      if (search === '*') {
+        // Fetch all employees from the API
+        fetch('http://127.0.0.1:5000/employee?eid=*')
+          .then(response => response.json())
+          .then(data => {
+            employeetable.style.display = 'block';
+            const employeeList = document.getElementById('employee-list');
+            employeeList.innerHTML = ''; // Clear all data table before adding new data
+
+            data.forEach(employee => {
               const tr = document.createElement('tr');
               tr.innerHTML = `
-                <td style="text-align:center;">${employee.eid}</td>
-                <td style="text-align:center;">${employee.name}</td>
-                <td style="text-align:center;">${employee.phone}</td>
-                <td style="text-align:center;">${employee.email}</td>
-                <td><button onclick="showEditForm('${employee.eid}')">Edit</button><button data-eid="${employee.eid}">Delete</button></td>
+                <td>${employee.eid}</td>
+                <td>${employee.name}</td>
+                <td>${employee.phone}</td>
+                <td>${employee.email}</td>
+                <td>
+                  <button onclick="showEditForm('${employee.eid}')">Edit</button>
+                  <button data-eid="${employee.eid}">Delete</button></td>
+                </td>
               `;
               employeeList.appendChild(tr);
-            })
-            .catch(error => console.error(error));
-        }
-      }
-          // ADD Data
-
-        const showFormButton = document.getElementById('show-form-to-add-employee');
-        const form = document.getElementById('from-to-add');
-        const successMessage = document.getElementById('success-message');
-        const apiEndpoint = 'http://127.0.0.1:5000/employee?eid=*';
-        showFormButton.addEventListener('click', event => {
-          form.style.display = form.style.display === 'none' ? 'block' : 'none';
-        });
-        form.addEventListener('submit', event => {
-          event.preventDefault();
-
-          const postData = {
-            eid: form.elements.eid.value,
-            name: form.elements.name.value,
-            phone: form.elements.phone.value,
-            email: form.elements.email.value
-          };
-
-          const options = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(postData)
-          };
-
-          fetch(apiEndpoint, options)
-            .then(response => {
-              if (response.ok) {
-                successMessage.style.display = 'block';
-                form.reset();
-                setTimeout(() => {
-                  successMessage.style.display = 'none';
-                  form.style.display ='none';
-                }, 2500);
-                return response.json();
-              } else {
-                throw new Error('Failed to post data to API.');
-              }
-            })
-            .then(data => {
-              console.log('Data posted to API:', data);
-              // Do something with the response data, if needed
-            })
-            .catch(error => {
-              console.error(error);
-              // Handle errors that occurred during the request
             });
+          });
+      } else {
+        // Fetch employee by ID from the API
+        fetch(`http://127.0.0.1:5000/employee?eid=${search}`)
+          .then(response => response.json())
+          .then(employee => {
+            employeetable.style.display = 'block';
+            const employeeList = document.getElementById('employee-list');
+            employeeList.innerHTML = ''; // Clear all data table before adding new data
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${employee.eid}</td>
+              <td>${employee.name}</td>
+              <td>${employee.phone}</td>
+              <td>${employee.email}</td>
+              <td>
+                <button onclick="showEditForm('${employee.eid}')">Edit</button>
+                <button onclick="deleteEmployee('${employee.eid}')">Delete</button>
+              </td>
+            `;
+            employeeList.appendChild(tr);
+          })
+          .catch(error => {
+            employeetable.style.display = 'none';
+            console.log('Employee not found:', error);
+          });
+      }
+    }
+
+    function showAddForm() {
+      const addForm = document.getElementById('form-to-add');
+      addForm.style.display = 'block';
+    }
+
+    function showEditForm(employeeId) {
+      const editFormContainer = document.getElementById('edit-form-container');
+      const formToPut = document.getElementById('form_to_put');
+      const namePut = document.getElementById('nameput');
+      const phonePut = document.getElementById('phoneput');
+      const emailPut = document.getElementById('emailput');
+
+      // Set the employee ID in the edit form
+      formToPut.setAttribute('data-employee-id', employeeId);
+
+      // Fetch employee data by ID from the API
+      fetch(`http://127.0.0.1:5000/employee?eid=${employeeId}`)
+        .then(response => response.json())
+        .then(employee => {
+          namePut.value = employee.name;
+          phonePut.value = employee.phone;
+          emailPut.value = employee.email;
+          editFormContainer.style.display = 'block';
         });
+        
+      // Store the employeeId in the rememberedEmployeeId variable
+      rememberedEmployeeId = employeeId;
+    }
 
-            // DELETE data
-
-        function deleteEmployee(eid) {
+         // Delete data
+         function deleteEmployee(eid) {
         // Send a DELETE request to the API with the eid value
         fetch(`http://127.0.0.1:5000/employee`, {
           method: 'DELETE',
@@ -199,79 +184,105 @@
           deleteEmployee(eid);
           const successMessage = document.getElementById('delete-success-message');
           successMessage.style.display = 'block';
+          const employeetable = document.getElementById('employee-table');
+          employeetable.style.display = 'none';
           setTimeout(() => {
             successMessage.style.display = 'none';
-          }, 2500);
+            searchEmployee();
+          }, 2000);
         }
       });
+    function handleAddFormSubmit(event) {
+      event.preventDefault();
 
-        // PUT Data
-        function showEditForm(employeeId) {
-        const formContainer = document.getElementById('edit-form-container');
-        if (formContainer.style.display === "none" || formContainer.style.display === ''){
-          formContainer.style.display = 'block'; // Show the form container
-          // Populate the form with the employee data
-          const nameInput = document.getElementById('nameput');
-          const phoneInput = document.getElementById('phoneput');
-          const emailInput = document.getElementById('emailput');
+      const form = document.getElementById('form-to-add');
+      const eid = document.getElementById('eid').value;
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
 
-          // Fetch the employee data from the API
-          fetch(`http://127.0.0.1:5000/employee?eid=${employeeId}`)
-            .then(response => response.json())
-            .then(data => {
-              nameInput.value = data.name;
-              phoneInput.value = data.phone;
-              emailInput.value = data.email;
-            })
-            .catch(error => console.error(error));
-        } else{
-          formContainer.style.display = 'none';
-        }
-        
-        const form = document.getElementById('form_to_put');
-        const successMessage = document.getElementById('put-success-message');
-        
-        form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent the form from submitting normally
+      const employeeData = {
+        eid: eid,
+        name: name,
+        phone: phone,
+        email: email
+      };
 
-        // Get the employee ID
-        // const employeeId = document.getElementById('searchid').value;
-
-        // Get the form data
-        const name = document.getElementById('nameput').value;
-        const phone = document.getElementById('phoneput').value;
-        const email = document.getElementById('emailput').value;
-        
-        const data = {
-          eid: employeeId,
-          name: name,
-          phone: phone,
-          email: email
-        };
-
-        // Send the PUT request to update the employee data
-        fetch(`http://127.0.0.1:5000/employee`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
+      fetch('http://127.0.0.1:5000/employee?eid=*', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(employeeData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          const postFormContainer = document.getElementById('form-to-add');
+          const employeetable = document.getElementById('employee-table');
+          const postSuccessMessage = document.getElementById('success-message');
+          postSuccessMessage.style.display = 'block';
+          employeetable.style.display = 'none';
+          postFormContainer.style.display = 'none';
+          form.reset();
+          console.log('Data Posted successfully:', data);
+          setTimeout(()=>{
+            // postFormContainer.style.display = 'none';
+            postSuccessMessage.style.display = 'none';
+            // // Refresh the employee list
+            searchEmployee();
+          },1000)
         })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Updated data:', data);
-            successMessage.style.display = 'block'; // Show the success message
-            form.reset(); // Reset the form
-            setTimeout(() => {
-              formContainer.style.display ='none';
-              successMessage.style.display = 'none';
-          }, 2500);
-            
-          })
-          .catch(error => console.error(error));
-      });
-      }
+        .catch(error => console.error('Error posting data:', error));
+    }
 
-    </script>
+    function handlePutFormSubmit(event) {
+      event.preventDefault();
+
+      const form = document.getElementById('form_to_put');
+      const employeeId = form.getAttribute('data-employee-id');
+      const name = document.getElementById('nameput').value;
+      const phone = document.getElementById('phoneput').value;
+      const email = document.getElementById('emailput').value;
+
+      const employeeData = {
+        eid:employeeId,
+        name: name,
+        phone: phone,
+        email: email
+      };
+
+      fetch(`http://127.0.0.1:5000/employee`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(employeeData)
+      })
+        .then(response => response.json())
+        .then(data => { 
+          const editFormContainer = document.getElementById('edit-form-container');
+          const employeetable = document.getElementById('employee-table');
+          const putSuccessMessage = document.getElementById('put-success-message');
+          putSuccessMessage.style.display = 'block';
+          employeetable.style.display = 'none';
+          editFormContainer.style.display = 'none';
+          form.reset();
+          console.log('Data updated successfully:', data);
+          setTimeout(()=>{
+            editFormContainer.style.display = 'none';
+            putSuccessMessage.style.display = 'none';
+            // Refresh the employee list
+            searchEmployee();
+          },1000)
+
+        })
+        .catch(error => console.error('Error updating data:', error));
+    }
+
+    // Attach event listeners
+    document.getElementById('show-form-to-add-employee').addEventListener('click', showAddForm);
+    document.getElementById('form-to-add').addEventListener('submit', handleAddFormSubmit);
+    document.getElementById('form_to_put').addEventListener('submit', handlePutFormSubmit);
+  </script>
 </body>
 </html>
