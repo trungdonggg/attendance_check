@@ -18,7 +18,7 @@ class Holiday(Resource):
                     for i in result:
                         data = {
                             'jid': (i[1]),
-                            'holiday_date': i[0].strftime("%m-%d-%Y")
+                            'holiday_date': i[0].strftime("%Y-%m-%d")
                         }
                         drive.append(data)
                     return drive, 200

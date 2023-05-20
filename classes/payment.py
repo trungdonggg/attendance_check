@@ -33,10 +33,10 @@ class Payment(Resource):
 
 
                 idx = fromdate[fromdate[0] < s1].index.tolist()[-1]
-                val = fromdate.iloc[idx]
+                str_j = fromdate.iloc[idx][1]
 
                 print (frdate)
-                print (val[0])
+
 
 
 
