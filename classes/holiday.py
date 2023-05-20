@@ -1,6 +1,5 @@
 from flask import request
 from flask_restful import Resource
-from cs311.attendance.utils import myconverter
 
 
 class Holiday(Resource):
@@ -18,8 +17,8 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'jid': myconverter(i[0]),
-                            'holiday_date': myconverter(i[1])
+                            'jid': (i[1]),
+                            'holiday_date': i[0].strftime("%m-%d-%Y")
                         }
                         drive.append(data)
                     return drive, 200
