@@ -26,8 +26,8 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'jid': i[0],
-                            'holiday_date': i[1]
+                            'jid': i[1],
+                            'holiday_date': i[0]
                         }
                         drive.append(data)
                     return jsonify(drive)
@@ -41,8 +41,8 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'jid': i[0],
-                            'holiday_date': i[1]
+                            'jid': i[1],
+                            'holiday_date': i[0]
                         }
                         drive.append(data)
                     return jsonify(drive)
