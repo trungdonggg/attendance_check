@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holiday</title>
+</head>
+<body>
+    <button type="button">
+      <a href="/frontend/main.html">Home</a>
+    </button>
+
+    <h1>Holiday Data</h1>
+          <!-- this is the search form -->
+    <form>
+      Search: <input type="text" id="searchid" placeholder="Job ID..">
+    <!-- this is button to Find -->
+      <button type="button" onclick="searchHoliday()">Find</button>
+    </form>
+
+          <!-- This is the employee table -->
+    <table id="holiday-table">
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Holiday</th>
+          <th>Option</th>
+        </tr>
+      </thead>
+      <tbody id="holiday-list"></tbody>
+
+  <script>
+          // SEARCH and SHOW Data
+
+
+        function searchHoliday(){
+        const search = document.getElementById('searchid').value;
+        if (search === '*') {
+        // pull the data from the API
+          fetch('http://127.0.0.1:5000/holiday?jid=*')
+            .then(response => response.json())
+            .then(data => {
+                const holidayList = document.getElementById('holiday-list');
+                holidayList.innerHTML = ''; // Clear all data table before adding new data
+                data.forEach(holiday => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                  <td style="text-align:center;">${holiday.jid}</td>
+                  <td style="text-align:center;">${holiday.holiday_date}</td>
+                  <td><button onclick="showEditForm('${holiday.jid}')">Edit</button><button data-eid="${holiday.jid}">Delete</button></td>
+                `;
+                holidayList.appendChild(tr);
+              });
+            })
+            .catch(error => console.error(error));
+        } else {
+          // pull the data from the API for the specific eid
+          fetch(`http://127.0.0.1:5000/holiday?jid=${search}`)
+            .then(response => response.json())
+            .then(data => {
+                const holidayList = document.getElementById('holiday-list');
+                holidayList.innerHTML = ''; // Clear all data table before adding new data
+                data.forEach(holiday => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                  <td style="text-align:center;">${holiday.jid}</td>
+                  <td style="text-align:center;">${holiday.holiday_date}</td>
+                  <td><button onclick="showEditForm('${holiday.jid}')">Edit</button><button data-eid="${holiday.jid}">Delete</button></td>
+                `;
+                holidayList.appendChild(tr);
+              });
+            })
+            .catch(error => console.error(error));
+        }
+      }
+    </script>
+</body>
+</html>
