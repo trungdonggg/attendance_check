@@ -42,7 +42,7 @@
     </table>
 
           <!-- This is the form -->
-    <form id="from-to-add">
+    <form id="from-to-add" style="display: none;">
       <!-- form -->
       <label for="jid">Job Id</label>
       <input type="text" id="jid" name="id" required>
@@ -93,15 +93,12 @@
         <!-- Success message element -->
         <div id="put-success-message" style="display:none">Data updated successfully</div>
       </div>
-
-      <!-- Success message element -->
-      <div id="put-success-message" style="display:none">Data updated successfully</div>
       </form>
     </div>
 
 
     <!-- Success message element -->
-    <div id="success-message" style="display:none">Data posted successfully</div>
+    <div id="success-message" style="display:none">Data posted successfully!<br>Please Reload or Find again</div>
     <!-- Delete success message -->
     <div id="delete-success-message" style="display:none">Data delete successfully</div>
 
@@ -163,15 +160,8 @@
       // Get a reference to the form element
       const form = document.getElementById('from-to-add');
       const successMessage = document.getElementById('success-message');
-      const isFormVisible = localStorage.getItem('isFormVisible') === 'true';
-      if (isFormVisible) {
-        form.style.display = 'block';
-      } else{
-        form.style.display='none';
-      }
       Show_Form.addEventListener('click', event=>{
         form.style.display = (form.style.display === 'none') ? 'block' : 'none';
-        localStorage.setItem('isFormVisible', form.style.display === 'block');
       });
       // Handle form submission
       form.addEventListener('submit', event => {

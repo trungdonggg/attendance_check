@@ -36,9 +36,9 @@
     </table>
 
           <!-- This is the form -->
-    <form id="from-to-add">
+    <form id="from-to-add" style="display: none;">
       <!-- form -->
-      <label for="eid">Eid</label>
+      <label for="eid">Employee ID:</label>
       <input type="text" id="eid" name="id" required>
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required>
@@ -123,15 +123,9 @@
         const form = document.getElementById('from-to-add');
         const successMessage = document.getElementById('success-message');
         const apiEndpoint = 'http://127.0.0.1:5000/employee?eid=*';
-
-        const isFormVisible = localStorage.getItem('isFormVisible') === 'true';
-        form.style.display = isFormVisible ? 'block' : 'none';
-
         showFormButton.addEventListener('click', event => {
           form.style.display = form.style.display === 'none' ? 'block' : 'none';
-          localStorage.setItem('isFormVisible', form.style.display === 'block');
         });
-
         form.addEventListener('submit', event => {
           event.preventDefault();
 
