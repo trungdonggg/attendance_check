@@ -18,8 +18,8 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'jid': myconverter(i[1]),
-                            'holiday_date': myconverter(i[0])
+                            'jid': myconverter(i[0]),
+                            'holiday_date': myconverter(i[1])
                         }
                         drive.append(data)
                     return drive, 200
