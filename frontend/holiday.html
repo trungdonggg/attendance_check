@@ -7,48 +7,54 @@
   <title>Holiday</title>
 </head>
 <body>
-    <button type="button">
-      <a href="/frontend/main.html">Home</a>
-    </button>
+  <button type="button">
+    <a href="/frontend/main.html">Home</a>
+  </button>
 
-    <h1>Holiday Data</h1>
-    <!-- Search form -->
-    <form>
-      Search: <input type="text" id="searchid" placeholder="Job ID..">
-      <button type="button" onclick="searchHoliday()">Find</button>
-    </form>
+  <h1>Holiday Data</h1>
 
-    <!-- Holiday table -->
-    <table id="holiday-table">
-      <thead>
-        <tr>
-          <th>Job ID</th>
-          <th>Holiday</th>
-          <th>Option</th>
-        </tr>
-      </thead>
-      <tbody id="holiday-list"></tbody>
-      <button id="show-form-to-add-holiday">Add</button>
-    </table>
+  <!-- Search form -->
+  <form>
+    Search: <input type="text" id="searchid" placeholder="Job ID..">
+    <button type="button" onclick="searchHoliday()">Find</button>
+  </form>
 
-    <!-- Form to add holiday -->
-    <form id="form-to-add" style="display: none;">
-      <label for="jid">Job ID:</label>
-      <input type="text" id="jid" name="id" required>
-      <label for="holiday_date">Holiday Date:</label>
-      <input type="date" id="holiday_date" name="holiday" required>
-      <button type="submit">Submit</button>
-      <div id="success-message" style="display:none">Data posted successfully!<br>Please reload or find again.</div>
-    </form>
+<!-- Holiday table -->
+<table id="holiday-table" style="display: none;">
+    <thead>
+      <tr>
+        <th>Job ID</th>
+        <th>Holiday</th>
+        <th>Option</th>
+      </tr>
+    </thead>
+    <tbody id="holiday-list"></tbody>
+    <button id="show-form-to-add-holiday">Add</button>
+  </table>
 
-    <script>
-      // Function to fetch and display holiday data
-      function searchHoliday() {
-        const search = document.getElementById('searchid').value;
+ <!-- Form to add holiday -->
+ <form id="form-to-add" style="display: none;">
+    <label for="jid">Job ID:</label>
+    <input type="text" id="jid" name="id" required>
+    <label for="holiday_date">Holiday Date:</label>
+    <input type="date" id="holiday_date" name="holiday" required>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="success-message" style="display: none;">Data posted successfully!</div>
+  <div id="delete-success-message" style="display: none;">Deleted successfully!</div>
+
+  <script>
+
+    function searchHoliday() {
+      const search = document.getElementById('searchid').value;
+      const holidaytable = document.getElementById('holiday-table');
+
         if (search ==='*'){
           fetch('http://127.0.0.1:5000/holiday?jid=*')
           .then(response => response.json())
           .then(data => {
+            holidaytable.style.display = 'block';
             const holidayList = document.getElementById('holiday-list');
             holidayList.innerHTML = ''; // Clear all data table before adding new data
             data.forEach(holiday => {
@@ -62,71 +68,36 @@
             });
           })
           .catch(error => console.error(error));
-      } else{
+      } else {
+        // Fetch holiday by ID from the API
         fetch(`http://127.0.0.1:5000/holiday?jid=${search}`)
           .then(response => response.json())
-          .then(data => {
+          .then(holiday => {
+            holidaytable.style.display = 'block';
             const holidayList = document.getElementById('holiday-list');
             holidayList.innerHTML = ''; // Clear all data table before adding new data
-            data.forEach(holiday => {
-              const tr = document.createElement('tr');
-              tr.innerHTML = `
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
                 <td style="text-align:center;">${holiday.jid}</td>
                 <td style="text-align:center;">${holiday.holiday_date}</td>
                 <td><button onclick="deleteHoliday('${holiday.jid}', '${holiday.holiday_date}')">Delete</button></td>
               `;
-              holidayList.appendChild(tr);
-            });
+            holidayList.appendChild(tr);
           })
-          .catch(error => console.error(error));
+          .catch(error => {
+            holidaytable.style.display = 'none';
+            console.log('Holiday not found:', error);
+          });
       }
-        }
-        
+    }
 
-      // Function to add a holiday
-      const showFormButton = document.getElementById('show-form-to-add-holiday');
-      const form = document.getElementById('form-to-add');
-      const successMessage = document.getElementById('success-message');
-      showFormButton.addEventListener('click', event => {
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
-      });
+    function showAddForm() {
+      const addForm = document.getElementById('form-to-add');
+      addForm.style.display = 'block';
+    }
 
-      form.addEventListener('submit', event => {
-        event.preventDefault();
-
-        const postData = {
-          jid: form.elements.jid.value,
-          holiday_date: form.elements.holiday_date.value,
-        };
-
-        const options = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(postData)
-        };
-
-        fetch('http://127.0.0.1:5000/holiday', options)
-          .then(response => {
-            if (response.ok) {
-              successMessage.style.display = 'block';
-              form.reset();
-              setTimeout(() => {
-                successMessage.style.display = 'none';
-                form.style.display = 'none';
-                fetchHolidayData(); // Refresh the holiday data after successful addition
-              }, 2500);
-            } else {
-              throw new Error('Failed to post data to API.');
-            }
-          })
-          .catch(error => console.error(error));
-      });
-
-
-      // Function to delete a holiday
-        function deleteHoliday(jid, holidayDate) {
+    function deleteHoliday(jid, holidayDate) {
         const formattedDate = new Date(holidayDate).toISOString().split('T')[0];
 
         const postData = { jid: jid, holiday_date: formattedDate };
@@ -142,18 +113,64 @@
         fetch('http://127.0.0.1:5000/holiday', options)
           .then(response => {
             if (response.ok) {
-              const successMessage = document.getElementById('success-message');
+              const successMessage = document.getElementById('delete-success-message');
               successMessage.style.display = 'block';
+              const holidaytable = document.getElementById('holiday-table');
+              holidaytable.style.display='none';
               setTimeout(() => {
+                holidaytable.style.display = 'block';
                 successMessage.style.display = 'none';
-                fetchHolidayData(); // Refresh the holiday data after successful deletion
-              }, 2500);
+                searchHoliday(); // Refresh the holiday data after successful deletion
+              }, 1000);
             } else {
               throw new Error('Failed to delete data from API.');
             }
           })
           .catch(error => console.error(error));
       }
-    </script>
+
+    function handleAddFormSubmit(event) {
+      event.preventDefault();
+
+      const form = document.getElementById('form-to-add');
+      const jid = document.getElementById('jid').value;
+      const holiday_date = document.getElementById('holiday_date').value;
+
+      const holidayData = {
+        jid: jid,
+        holiday_date: holiday_date,
+      };
+
+      fetch('http://127.0.0.1:5000/holiday?jid=*', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(holidayData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          const postFormContainer = document.getElementById('form-to-add');
+          const holidaytable = document.getElementById('holiday-table');
+          const postSuccessMessage = document.getElementById('success-message');
+          postSuccessMessage.style.display = 'block';
+          holidaytable.style.display = 'none';
+          postFormContainer.style.display = 'none';
+          form.reset();
+          console.log('Data Posted successfully:', data);
+          setTimeout(()=>{
+            // postFormContainer.style.display = 'none';
+            postSuccessMessage.style.display = 'none';
+            // // Refresh the holiday list
+            searchHoliday();
+          },1000)
+        })
+        .catch(error => console.error('Error posting data:', error));
+    }
+
+    // Attach event listeners
+    document.getElementById('show-form-to-add-holiday').addEventListener('click', showAddForm);
+    document.getElementById('form-to-add').addEventListener('submit', handleAddFormSubmit);
+  </script>
 </body>
 </html>
