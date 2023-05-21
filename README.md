@@ -1,6 +1,7 @@
 # Attendance Check Project
 ## Install Mysql server and Mysql Workbench
 For windows: https://www.simplilearn.com/tutorials/mysql-tutorial/mysql-workbench-installation
+
 For linux:
 1. Install mysql server:
     ```bash
