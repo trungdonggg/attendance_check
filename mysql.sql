@@ -1,40 +1,42 @@
 
-CREATE TABLE tbl_employee(
-  eid VARCHAR(10) NOT NULL PRIMARY KEY,
-  name VARCHAR(40) NOT NULL,
-  phone VARCHAR(13) NOT NULL,
-  email VARCHAR(40) NOT NULL
-);
+CREATE TABLE `tbl_employee` (
+  `eid` varchar(10) NOT NULL,
+  `name` varchar(40) NOT NULL,
+  `phone` varchar(13) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  PRIMARY KEY (`eid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-CREATE TABLE tbl_job( 
-jid VARCHAR(10) NOT NULL PRIMARY KEY, 
-title VARCHAR(40) NOT NULL,
-based_salary DECIMAL(14,3) NOT NULL,
-from_hour TIME NOT NULL,
-to_hour TIME NOT NULL,
-late_coefficient FLOAT NOT NULL,
-overtime_coefficient FLOAT NOT NULL
- );
+CREATE TABLE `tbl_job` (
+  `jid` varchar(10) NOT NULL,
+  `title` varchar(40) NOT NULL,
+  `based_salary` float NOT NULL,
+  `from_hour` time NOT NULL,
+  `to_hour` time NOT NULL,
+  `late_coefficient` float NOT NULL,
+  `overtime_coefficient` float NOT NULL,
+  PRIMARY KEY (`jid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
  
- CREATE TABLE tbl_attendance(
-  clock_in DATETIME  NOT NULL PRIMARY KEY ,
-  clock_out DATETIME  NOT NULL,
-  eid VARCHAR(10) NOT NULL,
-  FOREIGN KEY (eid) REFERENCES tbl_employee(eid)
-);
+CREATE TABLE `tbl_attendance` (
+  `clock_in` datetime NOT NULL,
+  `clock_out` datetime DEFAULT NULL,
+  `eid` varchar(10) NOT NULL,
+  PRIMARY KEY (`clock_in`,`eid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-CREATE TABLE tbl_position(
-    from_date DATE NOT NULL PRIMARY KEY ,
-    eid VARCHAR(10) NOT NULL ,
-    jid VARCHAR(10) NOT NULL,
-    FOREIGN KEY (eid) REFERENCES tbl_employee(eid),
-    FOREIGN KEY(jid) REFERENCES tbl_job(jid)
-);
-CREATE TABLE tbl_holiday(
- holiday_date DATE NOT NULL PRIMARY KEY,
- jid VARCHAR(10) NOT NULL,
- FOREIGN KEY (jid) REFERENCES tbl_job(jid)
-);
+CREATE TABLE `tbl_position` (
+  `from_date` date NOT NULL,
+  `eid` varchar(10) NOT NULL,
+  `jid` varchar(10) NOT NULL,
+  PRIMARY KEY (`from_date`,`eid`,`jid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE `tbl_holiday` (
+  `holiday_date` date NOT NULL,
+  `jid` varchar(10) NOT NULL,
+  PRIMARY KEY (`holiday_date`,`jid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE tbl_payment(
 eid VARCHAR(10) NOT NULL ,
