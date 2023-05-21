@@ -58,12 +58,11 @@ class Position(Resource):
         if request.is_json:
             # convert to json
             data = request.get_json(force=True)
+            eid = data['eid']
             with self.connection.cursor() as cursor:
-                sql_delete = "DELETE FROM `tbl_position` where " \
-                           "('{}', '{}', '{}');"
-                sql_delete = sql_delete.format(data['eid'], data['jid'],data['from_date'])
+                sql_delete = "DELETE FROM `tbl_position` WHERE `eid`=%s"
                 # Execute the query
-                cursor.execute(sql_delete)
+                cursor.execute(sql_delete, eid)
                 # the connection is not autocommited by default. So we must commit to save our changes.
                 self.connection.commit()
             return {"status": "success"}, 200
