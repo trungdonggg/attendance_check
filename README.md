@@ -26,6 +26,7 @@ For linux:
 1. Select conf folder
 2. Open config.json
 3. Enter: 
+
     "DATABASE_00": {
       "host":"localhost",
       "user":"your_user",
