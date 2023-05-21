@@ -8,6 +8,13 @@ CREATE TABLE `tbl_employee` (
   `email` varchar(40) NOT NULL,
   PRIMARY KEY (`eid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+insert into tbl_employee(eid,name,phone,email) value ('c01','David','02116468414','adaadsad@gmail.com');
+insert into tbl_employee(eid,name,phone,email) value ('c02','Ken','02116468412','asadsad@gmail.com');
+insert into tbl_employee(eid,name,phone,email) value ('c03','Tom','02116468415','edasdsadsad@gmail.com');
+insert into tbl_employee(eid,name,phone,email) value ('c04','Lucy','02116468464','adas312adsad@gmail.com');
+insert into tbl_employee(eid,name,phone,email) value ('c05','Annette','02116448414','adasdswewe@gmail.com');
+insert into tbl_employee(eid,name,phone,email) value ('c06','Sinbad','021164611414','ada312adsad@gmail.com');
+insert into tbl_employee(eid,name,phone,email) value ('c07','Merve','02116468434','adaqeqeadsad@gmail.com');
 
 CREATE TABLE `tbl_job` (
   `jid` varchar(10) NOT NULL,
