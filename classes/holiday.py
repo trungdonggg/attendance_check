@@ -17,7 +17,8 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                                # ??????????
+                            'jid' : i[0],
+                            'holiday_date' : 'month: '+str(i[1])+ ' date: '+str(i[2])
                         }
                         drive.append(data)
                     return drive, 200
@@ -30,7 +31,8 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            # ????????????
+                            'jid': i[0],
+                            'holiday_date': 'month: ' + i[1] + ' date: ' + i[2]
                         }
                         drive.append(data)
                     return drive, 200

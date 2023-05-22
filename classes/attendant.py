@@ -7,26 +7,25 @@ class Attendance(Resource):
     def __init__(self, **kwargs):
         self.connection = kwargs['connection']
 
-    def get(self):
-        if request.query_string is not None or request.query_string != "":
-            with self.connection.cursor() as cursor:
-                    drive = []
-                    sql = "SELECT * FROM `tbl_attendance` WHERE `eid`=%s"
-                    cursor.execute(sql, (request.args['eid'],))
-                    result = cursor.fetchall()
-                    for i in result:
-                        data = {
-                            'eid': i[2],
-                            # ?????? change this
-                        }
-                        drive.append(data)
-                    return drive, 200
-        else:
-            return {"status":"error"}
+    # def get(self):
+    #     if request.query_string is not None or request.query_string != "":
+    #         with self.connection.cursor() as cursor:
+    #                 drive = []
+    #                 sql = "SELECT * FROM `tbl_attendance` WHERE `eid`=%s"
+    #                 cursor.execute(sql, (request.args['eid'],))
+    #                 result = cursor.fetchall()
+    #                 for i in result:
+    #                     data = {
+    #                         'eid': i[2],
+    #                         # ?????? change this
+    #                     }
+    #                     drive.append(data)
+    #                 return drive, 200
+    #     else:
+    #         return {"status":"error"}
 
     def post(self):
         if request.is_json:
-            # convert to json
             data = request.get_json(force=True)
             with self.connection.cursor() as cursor:
                 sql_post = "insert into tbl_attendance " \
@@ -39,7 +38,8 @@ class Attendance(Resource):
                 sql_post = sql_post.format(data['eid'])
                 cursor.execute(sql_post)
                 self.connection.commit()
-            return {'status':'success'}, 201
+            # return {'status':'success'}, 201
+            return sql_post
         else:
             return {"status":"error"}
 
