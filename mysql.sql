@@ -28,10 +28,14 @@ CREATE TABLE `tbl_job` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
  
 CREATE TABLE `tbl_attendance` (
-  `clock_in` datetime NOT NULL,
-  `clock_out` datetime DEFAULT NULL,
   `eid` varchar(10) NOT NULL,
-  PRIMARY KEY (`clock_in`,`eid`)
+  `yearr` int NOT NULL,
+  `monthh` int NOT NULL,
+  `datee` int NOT NULL,
+  `clock_in` time NOT NULL,
+  `clock_out` time DEFAULT NULL,
+  PRIMARY KEY (`eid`,`yearr`,`monthh`,`datee`,`clock_in`),
+  CONSTRAINT `eid` FOREIGN KEY (`eid`) REFERENCES `tbl_employee` (`eid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `tbl_position` (
@@ -42,9 +46,11 @@ CREATE TABLE `tbl_position` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `tbl_holiday` (
-  `holiday_date` date NOT NULL,
   `jid` varchar(10) NOT NULL,
-  PRIMARY KEY (`holiday_date`,`jid`)
+  `holiday_month` int NOT NULL,
+  `holiday_date` int NOT NULL,
+  PRIMARY KEY (`jid`,`holiday_month`,`holiday_date`),
+  CONSTRAINT `jid` FOREIGN KEY (`jid`) REFERENCES `tbl_job` (`jid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE tbl_payment(
