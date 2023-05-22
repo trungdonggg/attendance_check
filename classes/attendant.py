@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from cs311.attendance.utils import myconverter
+# from cs311.attendance.utils import myconverter
 
 
 class Attendance(Resource):
@@ -40,8 +40,7 @@ class Attendance(Resource):
                 sql_post = sql_post.format(data['eid'])
                 cursor.execute(sql_post)
                 self.connection.commit()
-            # return {'status':'success'}, 201
-            return sql_post
+            return {'status':'success'}, 201
         else:
             return {"status":"error"}
 
