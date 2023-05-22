@@ -7,22 +7,24 @@ class Attendance(Resource):
     def __init__(self, **kwargs):
         self.connection = kwargs['connection']
 
-    # def get(self):
-    #     if request.query_string is not None or request.query_string != "":
-    #         with self.connection.cursor() as cursor:
-    #                 drive = []
-    #                 sql = "SELECT * FROM `tbl_attendance` WHERE `eid`=%s"
-    #                 cursor.execute(sql, (request.args['eid'],))
-    #                 result = cursor.fetchall()
-    #                 for i in result:
-    #                     data = {
-    #                         'eid': i[2],
-    #                         # ?????? change this
-    #                     }
-    #                     drive.append(data)
-    #                 return drive, 200
-    #     else:
-    #         return {"status":"error"}
+    def get(self):
+        if request.query_string is not None or request.query_string != "":
+            with self.connection.cursor() as cursor:
+                    drive = []
+                    sql = "SELECT * FROM `tbl_attendance` WHERE `eid`=%s"
+                    cursor.execute(sql, (request.args['eid'],))
+                    result = cursor.fetchall()
+                    for i in result:
+                        data = {
+                            'eid': i[0],
+                            'date': str(i[2])+" / "+str(i[3])+" / "+str(i[1]),
+                            'clock_in': str(i[4]),
+                            'clock_out': str(i[5])
+                        }
+                        drive.append(data)
+                    return drive, 200
+        else:
+            return {"status":"error"}
 
     def post(self):
         if request.is_json:

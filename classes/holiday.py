@@ -44,10 +44,12 @@ class Holiday(Resource):
             # convert to json
             data = request.get_json(force=True)
             with self.connection.cursor() as cursor:
-                # sql_post = "INSERT INTO `tbl_holiday` (`jid`, `holiday_date`) " \
-                #            "VALUES ('{}', '{}');"
-                # sql_post = sql_post.format(data['jid'], data['holiday_date'])
-                # cursor.execute(sql_post)
+                sql_post = "insert into `tbl_holiday`" \
+                           "set `jid` = '{}'," \
+                           "`holiday_month` = {}," \
+                           "`holiday_date` = {};"
+                sql_post = sql_post.format(data['jid'], data['holiday_month'],data['holiday_date'])
+                cursor.execute(sql_post)
                 self.connection.commit()
             return {'status':'success'}, 201
         else:
