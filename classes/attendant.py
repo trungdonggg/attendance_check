@@ -29,8 +29,13 @@ class Attendance(Resource):
             # convert to json
             data = request.get_json(force=True)
             with self.connection.cursor() as cursor:
-                sql_post = "INSERT INTO `tbl_attendance` (`eid`, `clock_in`, `clock_out`) " \
-                           "VALUES ('{}', now(),null);"
+                sql_post = "insert into tbl_attendance " \
+                           "set eid = '{}'," \
+                           "yearr = year(now())," \
+                           "monthh = month(now())," \
+                           "datee = day(now())," \
+                           "clock_in = time(now());"
+
                 sql_post = sql_post.format(data['eid'])
                 cursor.execute(sql_post)
                 self.connection.commit()
@@ -44,7 +49,7 @@ class Attendance(Resource):
     def put(self):
         if request.is_json:
             data = request.get_json(force=True)
-            sql_put = "update tbl_attendance set clock_out = now() " \
+            sql_put = "update tbl_attendance set clock_out = time(now()) " \
                       "where eid = '{}' and clock_out is null " \
                       "order by clock_in desc limit 1;"
             sql_put = sql_put.format(data['eid'])

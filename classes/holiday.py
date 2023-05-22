@@ -17,8 +17,7 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'jid': i[1],
-                            'holiday_date': i[0].strftime("%Y-%m-%d")
+                                # ??????????
                         }
                         drive.append(data)
                     return drive, 200
@@ -31,8 +30,7 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'jid': i[0],
-                            'holiday_date': i[1]
+                            # ????????????
                         }
                         drive.append(data)
                     return drive, 200
@@ -44,10 +42,10 @@ class Holiday(Resource):
             # convert to json
             data = request.get_json(force=True)
             with self.connection.cursor() as cursor:
-                sql_post = "INSERT INTO `tbl_holiday` (`jid`, `holiday_date`) " \
-                           "VALUES ('{}', '{}');"
-                sql_post = sql_post.format(data['jid'], data['holiday_date'])
-                cursor.execute(sql_post)
+                # sql_post = "INSERT INTO `tbl_holiday` (`jid`, `holiday_date`) " \
+                #            "VALUES ('{}', '{}');"
+                # sql_post = sql_post.format(data['jid'], data['holiday_date'])
+                # cursor.execute(sql_post)
                 self.connection.commit()
             return {'status':'success'}, 201
         else:
@@ -60,9 +58,9 @@ class Holiday(Resource):
             jid = data['jid']
             holiday_date = data['holiday_date']
             with self.connection.cursor() as cursor:
-                sql_delete = "DELETE FROM `tbl_holiday` WHERE `jid`='{}' and `holiday_date`='{}'"
-                sql_delete = sql_delete.format(jid,holiday_date)
-                cursor.execute(sql_delete)
+                # sql_delete = "DELETE FROM `tbl_holiday` WHERE `jid`='{}' and `holiday_date`='{}'"
+                # sql_delete = sql_delete.format(jid,holiday_date)
+                # cursor.execute(sql_delete)
                 self.connection.commit()
             return {"status": "success"}, 200
         else:
