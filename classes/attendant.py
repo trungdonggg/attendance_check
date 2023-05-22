@@ -17,8 +17,7 @@ class Attendance(Resource):
                     for i in result:
                         data = {
                             'eid': i[2],
-                            'clock_in': myconverter(i[0]),
-                            'clock_out': myconverter(i[1])
+                            # ?????? change this
                         }
                         drive.append(data)
                     return drive, 200
