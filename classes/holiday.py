@@ -41,7 +41,6 @@ class Holiday(Resource):
 
     def post(self):
         if request.is_json:
-            # convert to json
             data = request.get_json(force=True)
             with self.connection.cursor() as cursor:
                 sql_post = "insert into `tbl_holiday`" \

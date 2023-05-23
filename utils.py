@@ -24,3 +24,6 @@ def myconverter(o):
         o = o.__str__()
         return o
 
+def getIndex(v,m):
+    if v.month() == m:
+        return v
