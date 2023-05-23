@@ -195,11 +195,11 @@ let rememberdjobID = ""; // Variable to store the remembered job ID
       const jobData = {
         jid: jobID,
         title: title,
-        based_salary: based_salary,
-        from_hour: from_hour,
-        to_hour:to_hour,
-        late_coefficient:late_coefficient,
-        overtime_coefficient:overtime_coefficient
+        basedsalary: based_salary,
+        fromhour: from_hour,
+        tohour:to_hour,
+        latecoefficient:late_coefficient,
+        overtimecoefficient:overtime_coefficient
       };
 
       fetch(`http://127.0.0.1:5000/job`, {

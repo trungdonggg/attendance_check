@@ -1,5 +1,6 @@
 from flask import request
 from flask_restful import Resource
+import calendar
 
 
 class Holiday(Resource):
@@ -17,8 +18,9 @@ class Holiday(Resource):
                     result = cursor.fetchall()
                     for i in result:
                         data = {
-                            'jid' : i[0],
-                            'holiday_date' : 'month: '+str(i[1])+ ' date: '+str(i[2])
+                            'jid': i[0],
+                            'holiday_month': calendar.month_name[i[1]],
+                            'holiday_date': str(i[2])
                         }
                         drive.append(data)
                     return drive, 200
@@ -32,7 +34,8 @@ class Holiday(Resource):
                     for i in result:
                         data = {
                             'jid': i[0],
-                            'holiday_date': 'month: ' + str(i[1]) + ' date: ' + str(i[2])
+                            'holiday_month': calendar.month_name[i[1]],
+                            'holiday_date': str(i[2])
                         }
                         drive.append(data)
                     return drive, 200
@@ -59,11 +62,12 @@ class Holiday(Resource):
             # convert to json
             data = request.get_json(force=True)
             jid = data['jid']
+            holiday_month = data['holiday_month']
             holiday_date = data['holiday_date']
             with self.connection.cursor() as cursor:
-                # sql_delete = "DELETE FROM `tbl_holiday` WHERE `jid`='{}' and `holiday_date`='{}'"
-                # sql_delete = sql_delete.format(jid,holiday_date)
-                # cursor.execute(sql_delete)
+                sql_delete = "DELETE FROM `tbl_holiday` WHERE `jid`='{}' and `holiday_month`='{}' and `holiday_date`='{}'"
+                sql_delete = sql_delete.format(jid,holiday_month,holiday_date)
+                cursor.execute(sql_delete)
                 self.connection.commit()
             return {"status": "success"}, 200
         else:

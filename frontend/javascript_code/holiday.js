@@ -14,8 +14,9 @@ const holidaytable = document.getElementById('holiday-table');
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td style="text-align:center;">${holiday.jid}</td>
+            <td style="text-align:center;">${holiday.holiday_month}</td>
             <td style="text-align:center;">${holiday.holiday_date}</td>
-            <td><button onclick="deleteHoliday('${holiday.jid}', '${holiday.holiday_date}')">Delete</button></td>
+            <td><button onclick="deleteHoliday('${holiday.jid}','${holiday.holiday_month}','${holiday.holiday_date}')">Delete</button></td>
         `;
         holidayList.appendChild(tr);
         });
@@ -33,8 +34,9 @@ const holidaytable = document.getElementById('holiday-table');
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td style="text-align:center;">${holiday.jid}</td>
+            <td style="text-align:center;">${holiday.holiday_month}</td>
             <td style="text-align:center;">${holiday.holiday_date}</td>
-            <td><button onclick="deleteHoliday('${holiday.jid}', '${holiday.holiday_date}')">Delete</button></td>
+            <td><button onclick="deleteHoliday('${holiday.jid}','${holiday.holiday_month}','${holiday.holiday_date}')">Delete</button></td>
         `;
         holidayList.appendChild(tr);
     })
@@ -46,14 +48,19 @@ const holidaytable = document.getElementById('holiday-table');
 }
 
 function showAddForm() {
-const addForm = document.getElementById('form-to-add');
-addForm.style.display = 'block';
+    const addForm = document.getElementById('form-to-add');
+    addForm.style.display = 'block';
 }
 
-function deleteHoliday(jid, holidayDate) {
-    const formattedDate = new Date(holidayDate).toISOString().split('T')[0];
-
-    const postData = { jid: jid, holiday_date: formattedDate };
+function deleteHoliday(jid,holidayMonth, holidayDate) {
+    const formattedMonth = holidayMonth;
+    function getMonthNumberFromName(monthName) {
+        return new Date(`${monthName} 1, 2022`).getMonth() + 1;
+      }
+    const formattedDate = new Number(holidayDate);
+    // const formattedMonth = new Date(holidayDate).toISOString().split('T')[0];
+    console.log(getMonthNumberFromName(formattedMonth));
+    const postData = { jid: jid,holiday_month:getMonthNumberFromName(formattedMonth),holiday_date: formattedDate };
 
     const options = {
     method: 'DELETE',
@@ -88,10 +95,12 @@ event.preventDefault();
 const form = document.getElementById('form-to-add');
 const jid = document.getElementById('jid').value;
 const holiday_date = document.getElementById('holiday_date').value;
+const holiday_month = document.getElementById('holiday_month').value;
 
 const holidayData = {
     jid: jid,
-    holiday_date: holiday_date,
+    holiday_month: holiday_month,
+    holiday_date: holiday_date
 };
 
 fetch('http://127.0.0.1:5000/holiday?jid=*', {
@@ -118,7 +127,21 @@ fetch('http://127.0.0.1:5000/holiday?jid=*', {
         searchHoliday();
     },1000)
     })
-    .catch(error => console.error('Error posting data:', error));
+    .catch(error => {console.error('Error posting data:', error);
+                    const postFormContainer = document.getElementById('form-to-add');
+                    // Display the error message to the user
+                    const errorMessage = document.getElementById('error-message');
+                    errorMessage.textContent = 'Failed to post data: ' + error.message;
+                    errorMessage.style.display = 'block';
+                    postFormContainer.style.display = 'none';
+                    const holidaytable = document.getElementById('holiday-table');
+                    holidaytable.style.display = 'none';
+                    setTimeout(()=>{
+                        postFormContainer.style.display = 'block';
+                        errorMessage.style.display = 'none';
+                        searchHoliday();
+                    },1500);
+                });
 }
 
 // Attach event listeners

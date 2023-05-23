@@ -24,7 +24,8 @@
     <thead>
       <tr>
         <th>Job ID</th>
-        <th>Holiday</th>
+        <th>Month</th>
+        <th>Date</th>
         <th>Option</th>
       </tr>
     </thead>
@@ -36,13 +37,17 @@
  <form id="form-to-add" style="display: none;">
     <label for="jid">Job ID:</label>
     <input type="text" id="jid" name="id" required>
-    <label for="holiday_date">Holiday Date:</label>
-    <input type="date" id="holiday_date" name="holiday" required>
+    <label for="holiday_month">Month:</label>
+    <input type="number" id="holiday_month" name="holiday_month" required>
+    <label for="holiday_date">Date:</label>
+    <input type="number" id="holiday_date" name="holiday_date" required>
     <button type="submit">Submit</button>
   </form>
 
   <div id="success-message" style="display: none;">Data posted successfully!</div>
   <div id="delete-success-message" style="display: none;">Deleted successfully!</div>
+  <div id="error-message" style="display: none; color: red;"></div>
+
 
   <script src="javascript_code/holiday.js"></script>
 </body>

@@ -18,6 +18,7 @@ if (search === '*') {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td style="text-align:center;">${attendance.eid}</td>
+            <td style="text-align:center;">${attendance.date}</td>
             <td style="text-align:center;">${attendance.clock_in}</td>
             <td style="text-align:center;">${attendance.clock_out}</td>
         `;
