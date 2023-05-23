@@ -57,17 +57,31 @@ class Payment(Resource):
             # (position[0][1])
 
             # so sanh each workday voi from_date
-            #     neu < :
-            #             neu trong holiday: tinh tien
-            #             neu khong trong holiday: tinh tien
+                #     neu < :
+                #             neu trong holiday: tinh tien
+                #             neu khong trong holiday: tinh tien
 
-            #     neu >= : doi (jid init =>holiday init) : tinh tien
+                #     neu >= : doi (jid init =>holiday init) : tinh tien
+
                 b = True
+                i = 0
                 while b:
-                    try: pass
+                    print("tinh tien")
+                    try:
+                        # print(workday.iloc[i,:])
+                        if workday.iloc[i,1]<=fromdate.year & workday.iloc[i,2]<=fromdate.month \
+                            & workday.iloc[i,3]<fromdate.day:
+
+                            pass
+
+
+
+
+
+
+                        i += 1
                     except:
                         b = False
-
 
 
 
