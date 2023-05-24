@@ -104,6 +104,10 @@ function handleAddFormSubmit(event) {
     const eid = document.getElementById('eid').value;
     const jid = document.getElementById('jid').value;
     const from_date = document.getElementById('from_date').value;
+    const positiontable = document.getElementById('position-table');
+    const postFormContainer = document.getElementById('form-to-add');
+
+
 
 
     const positionData = {
@@ -119,25 +123,34 @@ function handleAddFormSubmit(event) {
     },
     body: JSON.stringify(positionData)
     })
-    .then(response => response.json())
-    .then(data => {
-        const postFormContainer = document.getElementById('form-to-add');
-        const positiontable = document.getElementById('position-table');
-        const postSuccessMessage = document.getElementById('success-message');
-        postSuccessMessage.style.display = 'block';
-        positiontable.style.display = 'none';
-        postFormContainer.style.display = 'none';
-        form.reset();
-        console.log('Data Posted successfully:', data);
-        setTimeout(()=>{
-        // postFormContainer.style.display = 'none';
-        postSuccessMessage.style.display = 'none';
-        // // Refresh the position list
-        searchPosition();
-        },1000)
-    })
-    .catch(error => console.error('Error posting data:', error));
-}
+    .then(response => {
+        if (response.ok) {
+            const postSuccessMessage = document.getElementById('success-message');
+            postSuccessMessage.style.display = 'block';
+            positiontable.style.display = 'none';
+            postFormContainer.style.display = 'none';
+            form.reset();
+            setTimeout(()=>{
+                postSuccessMessage.style.display = 'none';
+                searchPosition();
+            },1000);
+        } else {
+            throw new Error('Failed to post data to API.');
+        }
+        })
+    .catch(error => {console.error('Error posting data:', error);
+            positiontable.style.display = 'none';
+            // Display the error message to the user
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = 'Failed to POST Add exist Employee ID and Job ID, Please!!! ' +'(The main error: ' + error.message +')' ;
+            errorMessage.style.display = 'block';
+            postFormContainer.style.display = 'none';
+            setTimeout(()=>{
+                errorMessage.style.display = 'none';
+                searchattendance();
+            },2500);
+        });
+    }
 
 // Attach event listeners
 document.getElementById('show-form-to-add-position').addEventListener('click', showAddForm);
