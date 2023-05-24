@@ -42,7 +42,11 @@ CREATE TABLE `tbl_position` (
   `from_date` date NOT NULL,
   `eid` varchar(10) NOT NULL,
   `jid` varchar(10) NOT NULL,
-  PRIMARY KEY (`from_date`,`eid`,`jid`)
+  PRIMARY KEY (`from_date`,`eid`,`jid`),
+  KEY `eid_idx` (`eid`),
+  KEY `jid_idx` (`jid`),
+  CONSTRAINT `fk_eid` FOREIGN KEY (`eid`) REFERENCES `tbl_employee` (`eid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `fk_jid` FOREIGN KEY (`jid`) REFERENCES `tbl_job` (`jid`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `tbl_holiday` (
