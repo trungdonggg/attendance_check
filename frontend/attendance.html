@@ -20,7 +20,7 @@
     </form>
 
           <!-- This is the attendance table -->
-    <table id="attendance-table">
+    <table id="attendance-table" style="display: none;">
       <thead>
         <tr>
           <th>Employee ID</th>
@@ -34,11 +34,14 @@
     <div id="get-all-data" style="display: none;">Can't search all! <br> Please search with Individual Employee ID</div>
       <!-- This is the form -->
       <form id="from-to-add">
-        <button onclick="checkin()">Check In</button>
-        <button onclick="checkout()">Check Out</button>
-            <!-- Success message element -->
-        <div id="success-message" style="display:none">Thanks</div>
+        <button type="button" onclick="checkin()">Check In</button>
+        <button type="button" onclick="checkout()">Check Out</button>
+        
       </form>
+      <!-- Success message element -->
+      <div id="check-in-success-message" style="display:none; text-align: center;">Thanks <br> CHECK IN successfully!</div>
+      <div id="check-out-success-message" style="display:none; text-align: center;" >Thanks <br> CHECK OUT successfully!</div>
+      <div id="error-message" style="display: none; color: red;"></div>
   <script src="javascript_code/attendance.js"></script>
 </body>
 </html>

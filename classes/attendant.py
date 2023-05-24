@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-# from cs311.attendance.utils import myconverter
+from utils import myconverter
 
 
 class Attendance(Resource):
@@ -50,14 +50,25 @@ class Attendance(Resource):
     def put(self):
         if request.is_json:
             data = request.get_json(force=True)
-            sql_put = "update tbl_attendance set clock_out = time(now()) " \
-                      "where eid = '{}' and clock_out is null " \
-                      "order by clock_in desc limit 1;"
-            sql_put = sql_put.format(data['eid'])
-
             with self.connection.cursor() as cursor:
-                cursor.execute(sql_put)
+                # Check if there are any records for the given eid
+                sql_check = "SELECT COUNT(*) FROM tbl_attendance WHERE eid = %s"
+                cursor.execute(sql_check, (data['eid'],))
+                result = cursor.fetchone()
+                if result[0] == 0:
+                    return {'status': 'error', 'message': 'No records found for the specified eid.'}, 404
+
+                # Update the most recent record with null clock_out
+                sql_put = "UPDATE tbl_attendance SET clock_out = TIME(NOW()) " \
+                        "WHERE eid = %s AND clock_out IS NULL " \
+                        "ORDER BY clock_in DESC LIMIT 1"
+                cursor.execute(sql_put, (data['eid'],))
                 self.connection.commit()
+
+                # Check if any rows were affected
+                if cursor.rowcount == 0:
+                    return {'status': 'error', 'message': 'No matching records found for the specified eid.'}, 404
+
             return {'status': 'success'}, 200
         else:
-            return {"status": "error"}
+            return {'status': 'error', 'message': 'Invalid JSON payload.'}, 400
