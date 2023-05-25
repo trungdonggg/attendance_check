@@ -4,45 +4,47 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/frontend/css_code/job_style.css" />
+
   <title>Job</title>
 </head>
 <body>
     <button type="button">
-      <a href="/frontend/main.html">Home</a>
+      <a href="/frontend/main.html" id="logo">ATTENDANCE <br>WEBSITE </a>
     </button>
 
 
-    <h1>Job Data</h1>
+    <h1 class="title">Job Data</h1>
 
           <!-- this is the search form -->
-    <form>
-      Search: <input type="text" id="searchid" placeholder="Job ID..">
+    <form class="job_form_find">
+      <a style="font-size: larger;"> Search: </a><input class="job_input" size="40%" type="text" id="searchid" placeholder="Job ID..">
     <!-- this is button to Find -->
-      <button type="button" onclick="searchJob()">Find</button>
+      <button type="button" onclick="searchJob()" style="font-size: 100%;">Find</button>
     
     </form>
 
           <!-- This is the job table -->
-    <table id="job-table" style="display: none;">
+    <table class="job_table" id="job-table" style="display: none;">
       <thead>
         <tr>
-          <th>Job ID</th>
-          <th>Title</th>
-          <th>Based Salary</th>
-          <th>From Hour</th>
-          <th>To Hour</th>
-          <th>Late Coefficient</th>
-          <th>Overtime Coefficient</th>
-          <th>Option</th>
+          <th class="job_id">Job ID</th>
+          <th class="job_title">Title</th>
+          <th class="job_salary">Based Salary</th>
+          <th class="job_from">From Hour</th>
+          <th class="job_to">To Hour</th>
+          <th class="job_late">Late Coefficient</th>
+          <th class="job_over">Overtime Coefficient</th>
+          <th class="job_option">Option</th>
         </tr>
       </thead>
       <tbody id="job-list"></tbody>
       <!-- this is the button to SHOW FORM for add job -->
-      <button id="show-form-to-add-job">Add</button>
+      <button class="add_button" id="show-form-to-add-job">Add</button>
     </table>
 
           <!-- This is the form -->
-    <form id="form-to-add" style="display: none;">
+    <form class="job_form_add" id="form-to-add" style="display: none;">
       <!-- form -->
       <label for="jid">Job Id</label>
       <input type="text" id="jid" name="id" required>
@@ -68,7 +70,7 @@
       <button type="submit">Submit</button>
     </form>
 
-    <div id="edit-form-container" style="display: none;">
+    <div class="job_form_edit" id="edit-form-container" style="display: none;">
       <form id="form_to_put">
 
         <label for="titleput">Title:</label>
@@ -101,6 +103,8 @@
     <div id="success-message" style="display:none">Data posted successfully!</div>
     <!-- Delete success message -->
     <div id="delete-success-message" style="display:none">Data delete successfully!</div>
+    <div id="error-message" style="display: none; color: red;"></div>
+
 
   <script src="javascript_code/job.js">
     

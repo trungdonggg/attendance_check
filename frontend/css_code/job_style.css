@@ -1,0 +1,100 @@
+*{
+    padding: 2px;
+}
+th{
+    border: 1.5px solid;
+}
+td{
+    width: 10%;
+    border: 1.5px solid;
+}
+.title{
+    text-align: center;
+    font-size: 300%;
+    color: blue;
+}
+.job_table{
+    text-align: center;
+    justify-content: center;
+    position: relative;
+    top: 20px;
+    left: 13px;
+    right: 2px;
+}
+.job_form_find{
+    font-size: larger;
+    line-height: 3;
+    position: relative;
+    left: 82px;
+}
+.job_input{
+    font-size: 80%;
+    padding: 2px; 
+    line-height: 28px; 
+}
+.add_button{
+    font-size: larger;
+    width: 50px;
+    position: relative;
+    left: 550px;
+    right: 2px;
+    transition: all 0.3 ease;
+}
+.job_form_add{
+    position: relative;
+    top: 30px;
+    padding: 10px 30px;
+}
+.job_id{
+    color: #838B8B;
+    padding: 10px 20px;
+}
+.job_title{
+    color: #838B8B;
+    padding: 10px 20px;
+}
+.job_salary{
+    color: #838B8B;
+    padding: 10px 20px;
+}
+.job_from{
+    color: #838B8B;
+    padding: 10px 20px;
+}
+.job_to{
+    color: #838B8B;
+    padding: 10px 20px;
+}
+.job_late{
+    color: #838B8B;
+    padding: 10px 20px;
+}
+.job_over{
+    color: #838B8B;
+    padding: 10px 20px;
+}
+.job_option{
+    color: #1c1c1c;
+    padding: 10px 25px;
+}
+
+#logo{
+    background-color: red;
+    text-align: center;
+    background-image: linear-gradient(to top, #ff0844) 0%, #ffb199 100%;
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2 rem;
+}
+.job_form_edit{
+    position: relative;
+    top: 30px;
+    padding: 10px 30px;
+}

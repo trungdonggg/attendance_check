@@ -22,7 +22,7 @@ let rememberdjobID = ""; // Variable to store the remembered job ID
                 <td style="text-align:center;">${job.to_hour}</td>
                 <td style="text-align:center;">${job.late_coefficient}</td>
                 <td style="text-align:center;">${job.overtime_coefficient}</td>
-                <td><button onclick="showEditForm('${job.jid}')">Edit</button><button data-jid="${job.jid}">Delete</button></td>
+                <td style="text-align:center;"><button onclick="showEditForm('${job.jid}')">Edit</button><button data-jid="${job.jid}">Delete</button></td>
               `;
               jobList.appendChild(tr);
             });
@@ -45,7 +45,7 @@ let rememberdjobID = ""; // Variable to store the remembered job ID
                 <td style="text-align:center;">${job.to_hour}</td>
                 <td style="text-align:center;">${job.late_coefficient}</td>
                 <td style="text-align:center;">${job.overtime_coefficient}</td>
-                <td><button onclick="showEditForm('${job.jid}')">Edit</button><button data-jid="${job.jid}">Delete</button></td>
+                <td style="text-align:center;"><button onclick="showEditForm('${job.jid}')">Edit</button><button data-jid="${job.jid}">Delete</button></td>
               `;
               jobList.appendChild(tr);
           })
@@ -176,7 +176,21 @@ let rememberdjobID = ""; // Variable to store the remembered job ID
             searchJob();
           },1000)
         })
-        .catch(error => console.error('Error posting data:', error));
+        .catch(error => {console.error('Error posting data:', error);
+                    const postFormContainer = document.getElementById('form-to-add');
+                    // Display the error message to the user
+                    const errorMessage = document.getElementById('error-message');
+                    errorMessage.textContent = 'Failed to POST Add exist Job ID and Job ID, Please!!! ' +'(The main error: ' + error.message +')' ;
+                    errorMessage.style.display = 'block';
+                    postFormContainer.style.display = 'none';
+                    const jobtable = document.getElementById('job-table');
+                    jobtable.style.display = 'none';
+                    setTimeout(()=>{
+                        postFormContainer.style.display = 'block';
+                        errorMessage.style.display = 'none';
+                        searchJob();
+                    },2000);
+                });
     }
 
     function handlePutFormSubmit(event) {

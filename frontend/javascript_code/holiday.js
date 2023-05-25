@@ -131,7 +131,7 @@ fetch('http://127.0.0.1:5000/holiday?jid=*', {
                     const postFormContainer = document.getElementById('form-to-add');
                     // Display the error message to the user
                     const errorMessage = document.getElementById('error-message');
-                    errorMessage.textContent = 'Failed to post data: ' + error.message;
+                    errorMessage.textContent = 'Failed to POST Add exist Employee ID and Job ID, Please!!! ' +'(The main error: ' + error.message +')' ;
                     errorMessage.style.display = 'block';
                     postFormContainer.style.display = 'none';
                     const holidaytable = document.getElementById('holiday-table');

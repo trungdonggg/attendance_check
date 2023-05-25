@@ -165,7 +165,21 @@ let rememberedEmployeeId = ""; // Variable to store the remembered employee ID
             searchEmployee();
           },1000)
         })
-        .catch(error => console.error('Error posting data:', error));
+        .catch(error => {console.error('Error posting data:', error);
+                    const postFormContainer = document.getElementById('form-to-add');
+                    // Display the error message to the user
+                    const errorMessage = document.getElementById('error-message');
+                    errorMessage.textContent = 'Failed to POST Add exist Employee ID and Job ID, Please!!! ' +'(The main error: ' + error.message +')' ;
+                    errorMessage.style.display = 'block';
+                    postFormContainer.style.display = 'none';
+                    const employeetable = document.getElementById('employee-table');
+                    employeetable.style.display = 'none';
+                    setTimeout(()=>{
+                        postFormContainer.style.display = 'block';
+                        errorMessage.style.display = 'none';
+                        searchEmployee();
+                    },2000);
+                });
     }
 
     function handlePutFormSubmit(event) {
