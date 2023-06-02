@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from utils import myconverter
+# from utils import myconverter
 
 
 class Attendance(Resource):
@@ -17,9 +17,9 @@ class Attendance(Resource):
                     for i in result:
                         data = {
                             'eid': i[0],
-                            'date': str(i[2])+" / "+str(i[3])+" / "+str(i[1]),
-                            'clock_in': str(i[4]),
-                            'clock_out': str(i[5])
+                            'date': str(i[1]),
+                            'clock_in': str(i[2]),
+                            'clock_out': str(i[3])
                         }
                         drive.append(data)
                     return drive, 200
@@ -32,13 +32,12 @@ class Attendance(Resource):
             with self.connection.cursor() as cursor:
                 sql_post = "insert into tbl_attendance " \
                            "set eid = '{}'," \
-                           "yearr = year(now())," \
-                           "monthh = month(now())," \
-                           "datee = day(now())," \
+                           "dayy = day(now())," \
                            "clock_in = time(now());"
 
                 sql_post = sql_post.format(data['eid'])
                 cursor.execute(sql_post)
+
                 self.connection.commit()
             return {'status':'success'}, 201
         else:
@@ -58,12 +57,83 @@ class Attendance(Resource):
                 if result[0] == 0:
                     return {'status': 'error', 'message': 'No records found for the specified eid.'}, 404
 
+
                 # Update the most recent record with null clock_out
                 sql_put = "UPDATE tbl_attendance SET clock_out = TIME(NOW()) " \
                         "WHERE eid = %s AND clock_out IS NULL " \
                         "ORDER BY clock_in DESC LIMIT 1"
                 cursor.execute(sql_put, (data['eid'],))
                 self.connection.commit()
+
+
+                # update the paid col when check_out
+                eid = data['eid']
+                paid = 0
+
+                sql1 = 'SELECT * FROM cs311.tbl_attendance\
+                        where eid="{}" and paid is null;'
+                cursor.execute(sql1.format(eid))
+                result = cursor.fetchone()
+                day = result[1]
+                clock_in = result[2]
+                clock_out = result[3]
+                print(result)
+
+                sql2 = 'select j.jid, j.based_salary, j.from_hour, j.to_hour, j.late_coefficient, j.overtime_coefficient\
+                            from \
+                                (SELECT * FROM cs311.tbl_position \
+                                where "{}" >=  tbl_position.from_date and eid="{}"\
+                                order by from_date desc\
+                                limit 1) as x\
+                                inner join tbl_job as j\
+                                    on j.jid = x.jid;'
+                cursor.execute(sql2.format(day, eid))
+                res = cursor.fetchone()
+                jid = res[0]
+                based_salary = res[1]
+                from_hour = res[2]
+                to_hour = res[3]
+                late_coe = res[4]
+                overtime_coe = res[5]
+                print(res)
+
+                sql3 = 'select * from tbl_holiday where jid="{}" and \
+                                        holiday_month = month("{}") and holiday_date = day("{}");'
+                cursor.execute(sql3.format(jid, day, day))
+                res2 = cursor.fetchone()
+
+                if clock_in <= from_hour:
+                    if clock_out >= to_hour:
+                        w = int((to_hour - from_hour).total_seconds()) / 3600
+                        paid = w * based_salary
+
+                    else:
+                        s = int((to_hour - clock_out).total_seconds()) / 3600
+                        w = int((to_hour - from_hour).total_seconds()) / 3600
+                        paid = w * based_salary - s * based_salary * late_coe
+
+                else:
+                    if clock_out >= to_hour:
+                        l = int((clock_in - from_hour).total_seconds()) / 3600
+                        w = int((to_hour - from_hour).total_seconds()) / 3600
+                        paid = w * based_salary - l * based_salary * late_coe
+
+                    else:
+                        w = int((to_hour - from_hour).total_seconds()) / 3600
+                        l = int((clock_in - from_hour).total_seconds()) / 3600
+                        s = int((to_hour - clock_out).total_seconds()) / 3600
+                        paid = w * based_salary - l * based_salary * late_coe - s * based_salary * late_coe
+
+                if res2 is not None:
+                    paid = paid*overtime_coe
+                else:
+                    pass
+                sql_put2 = "UPDATE tbl_attendance SET paid = {} " \
+                          "WHERE eid = '{}' AND paid IS NULL " \
+                          "ORDER BY clock_in DESC LIMIT 1"
+                cursor.execute(sql_put2.format(paid, eid))
+                self.connection.commit()
+
 
                 # Check if any rows were affected
                 if cursor.rowcount == 0:
