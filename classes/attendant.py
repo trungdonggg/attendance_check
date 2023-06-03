@@ -32,7 +32,7 @@ class Attendance(Resource):
             with self.connection.cursor() as cursor:
                 sql_post = "insert into tbl_attendance " \
                            "set eid = '{}'," \
-                           "dayy = day(now())," \
+                           "dayy = date(now())," \
                            "clock_in = time(now());"
 
                 sql_post = sql_post.format(data['eid'])
@@ -128,6 +128,9 @@ class Attendance(Resource):
                     paid = paid*overtime_coe
                 else:
                     pass
+
+                paid = 0 if paid<0 else paid
+
                 sql_put2 = "UPDATE tbl_attendance SET paid = {} " \
                           "WHERE eid = '{}' AND paid IS NULL " \
                           "ORDER BY clock_in DESC LIMIT 1"
