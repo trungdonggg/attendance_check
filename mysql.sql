@@ -29,13 +29,12 @@ CREATE TABLE `tbl_job` (
  
 CREATE TABLE `tbl_attendance` (
   `eid` varchar(10) NOT NULL,
-  `yearr` int NOT NULL,
-  `monthh` int NOT NULL,
-  `datee` int NOT NULL,
+  `dayy` date NOT NULL,
   `clock_in` time NOT NULL,
   `clock_out` time DEFAULT NULL,
-  PRIMARY KEY (`eid`,`yearr`,`monthh`,`datee`,`clock_in`),
-  CONSTRAINT `eid` FOREIGN KEY (`eid`) REFERENCES `tbl_employee` (`eid`)
+  `paid` float DEFAULT NULL,
+  PRIMARY KEY (`eid`,`dayy`,`clock_in`),
+  CONSTRAINT `fk_tbl_attendance_1` FOREIGN KEY (`eid`) REFERENCES `tbl_employee` (`eid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `tbl_position` (
@@ -57,9 +56,11 @@ CREATE TABLE `tbl_holiday` (
   CONSTRAINT `jid` FOREIGN KEY (`jid`) REFERENCES `tbl_job` (`jid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE tbl_payment(
-eid VARCHAR(10) NOT NULL ,
-salary DECIMAL(14,3) NOT NULL PRIMARY KEY,
-month_year DATE NOT NULL,
-FOREIGN KEY (eid) REFERENCES tbl_employee(eid)
-);
+CREATE TABLE `tbl_payment` (
+  `eid` varchar(10) NOT NULL,
+  `salary` float DEFAULT NULL,
+  `monthh` int NOT NULL,
+  `yearr` int NOT NULL,
+  PRIMARY KEY (`eid`,`monthh`,`yearr`),
+  CONSTRAINT `tbl_payment_ibfk_1` FOREIGN KEY (`eid`) REFERENCES `tbl_employee` (`eid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
