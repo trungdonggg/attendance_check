@@ -64,6 +64,7 @@ let rememberdjobID = ""; // Variable to store the remembered job ID
     function showEditForm(jobID) {
         const editFormContainer = document.getElementById('edit-form-container');
         const formToPut = document.getElementById('form_to_put');
+        formToPut.style.display = 'block';
 
         const titleInput = document.getElementById('titleput');
         const basedsalaryInput = document.getElementById('based_salary_put');
@@ -134,6 +135,7 @@ let rememberdjobID = ""; // Variable to store the remembered job ID
       event.preventDefault();
 
         const form = document.getElementById('form-to-add');
+        form.style.display = 'block';
         const jid = document.getElementById('jid').value;
         const title = document.getElementById('title').value;
         const basedsalary = document.getElementById('based_salary').value;
@@ -193,6 +195,12 @@ let rememberdjobID = ""; // Variable to store the remembered job ID
                 });
     }
 
+function cancelForm() {
+  const addForm = document.getElementById('form-to-add');
+  addForm.style.display = 'none';
+}
+
+
     function handlePutFormSubmit(event) {
       event.preventDefault();
 
@@ -243,6 +251,11 @@ let rememberdjobID = ""; // Variable to store the remembered job ID
         })
         .catch(error => console.error('Error updating data:', error));
     }
+    function cancelFormedit() {
+      const editForm = document.getElementById('form_to_put');
+      editForm.style.display = 'none';
+    }
+
 
     // Attach event listeners
     document.getElementById('show-form-to-add-job').addEventListener('click', showAddForm);
