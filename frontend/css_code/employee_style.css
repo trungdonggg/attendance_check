@@ -1,85 +1,168 @@
-*{
-    padding: 2px;
-}
-th,td{
-    width: 20%;
-    border: 1.5px solid;
-}
-.employee_title{
-    text-align: center;
-    font-size: 300%;
-    color: blue;
-}
-.add_button{
-    font-size: larger;
+/* employee_style.css */
 
-    width: 50px;
-    position: relative;
-    left: 550px;
-    right: 2px;
-    transition: all 0.3 ease;
-}
-.employee_form_add{
-    position: relative;
-    top: 30px;
-    padding: 10px 40px;
-}
-.employee_form_find{
-    font-size: larger;
-    line-height: 3;
-    position: relative;
-    left: 82px;
-}
-.employee_input{
-    font-size: 80%;
-    padding: 2px; 
-    line-height: 28px; 
-}
-.employee_table{
-    text-align: center;
-    justify-content: center;
-    position: relative;
-    top: 20px;
-    left: 490px;
-    right: 2px;
-}
-.employee_id{
-    color: #838B8B;
-    padding: 10px 20px;
-} 
-.employee_name{
-    color: #838B8B;
-    padding: 10px 10px;
-}
-.employee_phone{
-    color: #838B8B;
-    padding: 10px 70px;
-}
-.employee_email{
-    color: #838B8B;
-    padding: 10px 70px;
-}
-.employee_option{
-    color: #1c1c1c;
-    padding: 10px 25px;
-} 
-#logo{
-    background-color: red;
-    text-align: center;
-    background-image: linear-gradient(to top, #ff0844) 0%, #ffb199 100%;
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    overflow: auto;
+  }
+  
+  /* Header Styles */
+  #logo {
     text-decoration: none;
-    font-size: 2 rem;
-}
-.employee_form_edit{
-    position: relative;
-    top: 30px;
-    padding: 10px 30px;
-}
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Title Styles */
+  .employee_title {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  
+  /* Form Styles */
+  .employee_form_find {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .employee_input {
+    padding: 5px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  input[type="text"] {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus {
+    border-color: #2196f3;
+  }
+  
+  /* Table Styles */
+  .employee_table {
+    width: 34%;
+    table-layout: fixed;
+    max-height: 390px; /* Adjust the desired height here */
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: scroll;
+  }
+  
+  .employee_table th,
+  .employee_table td {
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .list_employee {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .employee_option {
+    text-align: center;
+  }
+  
+  /* Add Button Style */
+  .add_button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Form to Add Employee */
+  .employee_form_add {
+    display: none;
+    margin-top: 20px;
+  }
+    /* Find Button Styles */
+    form button[type="button"] {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #2196f3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    form button[type="button"]:hover {
+      background-color: #0d8bf5;
+    }
+  
+  .employee_form_add label,
+  .employee_form_edit label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .employee_form_add input[type="text"],
+  .employee_form_add input[type="email"],
+  .employee_form_edit input[type="text"],
+  .employee_form_edit input[type="email"] {
+    width: 99%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .employee_form_add button[type="submit"],
+  .employee_form_edit button[type="submit"],
+  .employee_form_add button[type="button"],
+  .employee_form_edit button[type="button"] {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Success/Error Messages */
+  #success-message,
+  #put-success-message,
+  #delete-success-message,
+  #error-message {
+    display: none;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  #error-message {
+    color: red;
+  }
+  
