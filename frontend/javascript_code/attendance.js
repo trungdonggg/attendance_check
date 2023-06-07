@@ -21,6 +21,7 @@ function searchattendance(){
             const attendanceList = document.getElementById('attendance-list');
             attendanceList.innerHTML = ''; // Clear all data table before adding new data
             data.forEach(attendance=>{
+                console.log(attendance.date);
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td style="text-align:center;">${attendance.eid}</td>
@@ -64,7 +65,7 @@ function checkin(){
             successMessage.style.display = 'block';
             attendancetable.style.display = 'none';
             onclickbutton.style.display = 'none';
-
+    
             setTimeout(() => {
                 successMessage.style.display = 'none';
                 onclickbutton.style.display = 'block';
@@ -97,6 +98,7 @@ function checkout(){
     const postData ={
         eid:search
     }
+    console.log(search);
         // Set the API endpoint URL
     const apiEndpoint = 'http://127.0.0.1:5000/attendance';
 
@@ -128,6 +130,7 @@ function checkout(){
             throw new Error('Failed to post data to API.');
         }
         })
+
         .catch(error => {console.error('Error posting data:', error);
                 attendancetable.style.display = 'none';
                 // Display the error message to the user
