@@ -26,20 +26,21 @@ const holidaytable = document.getElementById('holiday-table');
     // Fetch holiday by ID from the API
     fetch(`http://127.0.0.1:5000/holiday?jid=${search}`)
     .then(response => response.json())
-    .then(holiday => {
+    .then(data => {
         holidaytable.style.display = 'block';
         const holidayList = document.getElementById('holiday-list');
         holidayList.innerHTML = ''; // Clear all data table before adding new data
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td style="text-align:center;">${holiday.jid}</td>
-            <td style="text-align:center;">${holiday.holiday_month}</td>
-            <td style="text-align:center;">${holiday.holiday_date}</td>
-            <td><button onclick="deleteHoliday('${holiday.jid}','${holiday.holiday_month}','${holiday.holiday_date}')">Delete</button></td>
-        `;
-        holidayList.appendChild(tr);
-    })
+        console.log(data);
+        data.forEach(holiday => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="text-align:center;">${holiday.jid}</td>
+                <td style="text-align:center;">${holiday.holiday_month}</td>
+                <td style="text-align:center;">${holiday.holiday_date}</td>
+                <td><button onclick="deleteHoliday('${holiday.jid}','${holiday.holiday_month}','${holiday.holiday_date}')">Delete</button></td>
+            `;
+            holidayList.appendChild(tr);
+        })})
     .catch(error => {
         holidaytable.style.display = 'none';
         console.log('Holiday not found:', error);
@@ -143,6 +144,10 @@ fetch('http://127.0.0.1:5000/holiday?jid=*', {
                     },1500);
                 });
 }
+function cancelForm() {
+    const addForm = document.getElementById('form-to-add');
+    addForm.style.display = 'none';
+  }
 
 // Attach event listeners
 document.getElementById('show-form-to-add-holiday').addEventListener('click', showAddForm);

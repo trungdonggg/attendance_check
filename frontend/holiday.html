@@ -4,44 +4,49 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/frontend/css_code/holiday_style.css">
   <title>Holiday</title>
 </head>
 <body>
   <button type="button">
-    <a href="/frontend/main.html">Home</a>
+    <a href="/frontend/main.html" id="logo">ATTENDANCE <br>WEBSITE </a>
   </button>
 
-  <h1>Holiday Data</h1>
+  <h1 class="title">Holiday Data</h1>
 
   <!-- Search form -->
-  <form>
+  <form class="holiday_form_find">
     Search: <input type="text" id="searchid" placeholder="Job ID..">
     <button type="button" onclick="searchHoliday()">Find</button>
   </form>
 
 <!-- Holiday table -->
-<table id="holiday-table" style="display: none;">
+<table class="holiday_table" id="holiday-table" style="display: none;">
     <thead>
       <tr>
         <th>Job ID</th>
-        <th>Month</th>
-        <th>Date</th>
-        <th>Option</th>
+        <th style="text-align: center;">Month</th>
+        <th style="text-align: center;">Date</th>
+        <th style="text-align: center;">Option</th>
       </tr>
     </thead>
     <tbody id="holiday-list"></tbody>
-    <button id="show-form-to-add-holiday">Add</button>
+    <button class="add_button" id="show-form-to-add-holiday">Add</button>
   </table>
 
  <!-- Form to add holiday -->
- <form id="form-to-add" style="display: none;">
+ <form class="form-add" id="form-to-add" style="display: none;">
     <label for="jid">Job ID:</label>
     <input type="text" id="jid" name="id" required>
+
     <label for="holiday_month">Month:</label>
     <input type="number" id="holiday_month" name="holiday_month" required>
+
     <label for="holiday_date">Date:</label>
     <input type="number" id="holiday_date" name="holiday_date" required>
+
     <button type="submit">Submit</button>
+    <button type="button" onclick="cancelForm()">Cancel</button>
   </form>
 
   <div id="success-message" style="display: none;">Data posted successfully!</div>

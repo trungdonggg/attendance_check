@@ -1,0 +1,161 @@
+/* holiday_style.css */
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    overflow: auto;
+  }
+  
+  /* Header Styles */
+  #logo {
+    text-decoration: none;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  /* Title Styles */
+  h1.title {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  
+  /* Form Styles */
+  form.holiday_form_find {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"],
+  input[type="number"] {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  input[type="text"]:focus,
+  input[type="number"]:focus {
+    border-color: #2196f3;
+  }
+  
+  /* Table Styles */
+  table.holiday_table {
+    width: 17%;
+    margin: 0 auto;
+    table-layout: fixed;
+    max-height: 275px;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: scroll;
+  }
+  
+  table.holiday_table th,
+  table.holiday_table td {
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Form Styles */
+  form.form-add {
+    text-align: none;
+    margin-top: 20px;
+  }
+  
+  
+  form.form-add label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+    font-weight: bold;
+  }
+  
+  form.form-add input[type="text"],
+  form.form-add input[type="number"] {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    display: inline-block;
+  }
+  
+  form.form-add input[type="text"]:focus,
+  form.form-add input[type="number"]:focus {
+    border-color: #2196f3;
+  }
+  
+  form.form-add button[type="submit"],
+  form.form-add button[type="button"] {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+/* Add Button Style */
+.add_button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+  /* Find Button Styles */
+  form.holiday_form_find button[type="button"] {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  form.holiday_form_find button[type="button"]:hover {
+    background-color: #0d8bf5;
+  }
+  
+  /* Success/Error Messages */
+  #success-message,
+  #delete-success-message,
+  #error-message {
+    display: none;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  #error-message {
+    color: red;
+  }
+  
