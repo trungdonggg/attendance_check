@@ -34,7 +34,7 @@ CREATE TABLE `tbl_attendance` (
   `clock_out` time DEFAULT NULL,
   `paid` float DEFAULT NULL,
   PRIMARY KEY (`eid`,`dayy`,`clock_in`),
-  CONSTRAINT `fk_tbl_attendance_1` FOREIGN KEY (`eid`) REFERENCES `tbl_employee` (`eid`)
+  CONSTRAINT `eid` FOREIGN KEY (`eid`) REFERENCES `tbl_employee` (`eid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `tbl_position` (
