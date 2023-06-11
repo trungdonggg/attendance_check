@@ -3,7 +3,7 @@ function searchPayment() {
     const searchmonth = document.getElementById('searchmonth').value;
     const searchyear = document.getElementById('searchyear').value;
     const paymenttable = document.getElementById('payment-table');
-    fetch(`http://127.0.0.1:5000/payment?eid=${searchid}&month=${searchmonth}&year=${searchyear}`)
+    fetch(`http://127.0.0.1:5000/payment?eid=${searchid}&month=${searchyear}&year=${searchmonth}`)
         .then(response => response.json())
         .then(payment => {
         paymenttable.style.display = 'block';
