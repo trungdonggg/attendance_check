@@ -57,14 +57,12 @@ class Attendance(Resource):
                 if result[0] == 0:
                     return {'status': 'error', 'message': 'No records found for the specified eid.'}, 404
 
-
                 # Update the most recent record with null clock_out
                 sql_put = "UPDATE tbl_attendance SET clock_out = TIME(NOW()) " \
-                        "WHERE eid = %s AND clock_out IS NULL " \
-                        "ORDER BY clock_in DESC LIMIT 1"
+                          "WHERE eid = %s AND clock_out IS NULL " \
+                          "ORDER BY clock_in DESC LIMIT 1"
                 cursor.execute(sql_put, (data['eid'],))
                 self.connection.commit()
-
 
                 # update the paid col when check_out
                 eid = data['eid']
