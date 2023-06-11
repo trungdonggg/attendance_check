@@ -56,12 +56,15 @@ class Attendance(Resource):
                 if result[0] == 0:
                     return {'status': 'error', 'message': 'No records found for the specified eid.'}, 404
 
+
                 # Update the most recent record with null clock_out
                 sql_put = "UPDATE tbl_attendance SET clock_out = TIME(NOW()) " \
                           "WHERE eid = %s AND clock_out IS NULL " \
                           "ORDER BY clock_in DESC LIMIT 1"
                 cursor.execute(sql_put, (data['eid'],))
                 self.connection.commit()
+
+
 
                 # update the paid col when check_out
                 eid = data['eid']
@@ -74,7 +77,6 @@ class Attendance(Resource):
                 day = result[1]
                 clock_in = result[2]
                 clock_out = result[3]
-                print(result)
 
                 sql2 = 'select j.jid, j.based_salary, j.from_hour, j.to_hour, j.late_coefficient, j.overtime_coefficient\
                             from \
@@ -92,7 +94,6 @@ class Attendance(Resource):
                 to_hour = res[3]
                 late_coe = res[4]
                 overtime_coe = res[5]
-                print(res)
 
                 sql3 = 'select * from tbl_holiday where jid="{}" and \
                                         holiday_month = month("{}") and holiday_date = day("{}");'
