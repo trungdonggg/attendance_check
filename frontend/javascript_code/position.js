@@ -151,7 +151,10 @@ function handleAddFormSubmit(event) {
             },2500);
         });
     }
-
+    function cancelForm() {
+        const addForm = document.getElementById('form-to-add');
+        addForm.style.display = 'none';
+      }
 // Attach event listeners
 document.getElementById('show-form-to-add-position').addEventListener('click', showAddForm);
 document.getElementById('form-to-add').addEventListener('submit', handleAddFormSubmit);

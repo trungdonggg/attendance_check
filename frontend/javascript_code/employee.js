@@ -181,6 +181,10 @@ let rememberedEmployeeId = ""; // Variable to store the remembered employee ID
                     },2000);
                 });
     }
+    function cancelForm() {
+      const addForm = document.getElementById('form-to-add');
+      addForm.style.display = 'none';
+    }
 
     function handlePutFormSubmit(event) {
       event.preventDefault();
@@ -225,6 +229,11 @@ let rememberedEmployeeId = ""; // Variable to store the remembered employee ID
         })
         .catch(error => console.error('Error updating data:', error));
     }
+    function cancelFormedit() {
+      const editForm = document.getElementById('form_to_put');
+      editForm.style.display = 'none';
+    }
+
 
     // Attach event listeners
     document.getElementById('show-form-to-add-employee').addEventListener('click', showAddForm);

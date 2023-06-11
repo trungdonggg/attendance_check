@@ -1,100 +1,162 @@
-*{
-    padding: 2px;
-}
-th{
-    border: 1.5px solid;
-}
-td{
-    width: 10%;
-    border: 1.5px solid;
-}
-.title{
+/* job_style.css */
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    overflow: auto;
+  }
+  
+  /* Header Styles */
+  #logo {
+    text-decoration: none;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Title Styles */
+  .title {
     text-align: center;
-    font-size: 300%;
-    color: blue;
-}
-.job_table{
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  
+  /* Form Styles */
+  .job_form_find {
     text-align: center;
-    justify-content: center;
-    position: relative;
-    top: 20px;
-    left: 13px;
-    right: 2px;
-}
-.job_form_find{
-    font-size: larger;
-    line-height: 3;
-    position: relative;
-    left: 82px;
-}
-.job_input{
-    font-size: 80%;
-    padding: 2px; 
-    line-height: 28px; 
-}
-.add_button{
-    font-size: larger;
-    width: 50px;
-    position: relative;
-    left: 550px;
-    right: 2px;
-    transition: all 0.3 ease;
-}
-.job_form_add{
-    position: relative;
-    top: 30px;
-    padding: 10px 30px;
-}
-.job_id{
-    color: #838B8B;
+    margin-bottom: 20px;
+  }
+  
+  .job_input {
+    padding: 5px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  input[type="text"] {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus {
+    border-color: #2196f3;
+  }
+  
+  /* Table Styles */
+  .job_table {
+    width: 47%;
+    table-layout: fixed;
+    max-height: 275px; /* Adjust the desired height here */
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: scroll;
+  }
+  
+  .job_table th,
+  .job_table td {
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .job_option {
+    text-align: center;
+  }
+  
+  /* Add Button Style */
+  .add_button {
+    display: block;
+    margin: 20px auto;
     padding: 10px 20px;
-}
-.job_title{
-    color: #838B8B;
-    padding: 10px 20px;
-}
-.job_salary{
-    color: #838B8B;
-    padding: 10px 20px;
-}
-.job_from{
-    color: #838B8B;
-    padding: 10px 20px;
-}
-.job_to{
-    color: #838B8B;
-    padding: 10px 20px;
-}
-.job_late{
-    color: #838B8B;
-    padding: 10px 20px;
-}
-.job_over{
-    color: #838B8B;
-    padding: 10px 20px;
-}
-.job_option{
-    color: #1c1c1c;
-    padding: 10px 25px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+    /* Find Button Styles */
+    form button[type="button"] {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #2196f3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    form button[type="button"]:hover {
+      background-color: #0d8bf5;
+    }
+  /* Form to Add Job */
+  .job_form_add {
+    display: none;
+    margin-top: 20px;
+  }
+  
+  .job_form_add label,
+  .job_form_edit label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .job_form_add input[type="text"],
+  .job_form_add input[type="email"],
+  .job_form_edit input[type="text"],
+  .job_form_edit input[type="email"] {
+    width: 99%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+.job_form_add button[type="submit"],
+.job_form_edit button[type="submit"],
+.job_form_add button[type="button"],
+.job_form_edit button[type="button"] {
+  display: inline-block; /* Change from "block" to "inline-block" */
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-#logo{
-    background-color: red;
+  /* Success/Error Messages */
+  #success-message,
+  #put-success-message,
+  #delete-success-message,
+  #error-message {
+    display: none;
+    margin-top: 10px;
     text-align: center;
-    background-image: linear-gradient(to top, #ff0844) 0%, #ffb199 100%;
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 2 rem;
-}
-.job_form_edit{
-    position: relative;
-    top: 30px;
-    padding: 10px 30px;
-}
+    font-weight: bold;
+  }
+  
+  #error-message {
+    color: red;
+  }
+  

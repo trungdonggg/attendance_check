@@ -1,4 +1,4 @@
-/* employee_style.css */
+/* position_style.css */
 
 /* General Styles */
 body {
@@ -24,19 +24,19 @@ body {
   }
   
   /* Title Styles */
-  .employee_title {
+  .position_title {
     text-align: center;
     margin-top: 40px;
     margin-bottom: 20px;
   }
   
   /* Form Styles */
-  .employee_form_find {
+  .position_form_find {
     text-align: center;
     margin-bottom: 20px;
   }
   
-  .employee_input {
+  .position_input {
     padding: 5px;
     width: 60%;
     border: 1px solid #ccc;
@@ -54,10 +54,9 @@ body {
   input[type="text"]:focus {
     border-color: #2196f3;
   }
-  
   /* Table Styles */
-  .employee_table {
-    width: 34%;
+  .position_table {
+    width: 20%;
     table-layout: fixed;
     max-height: 390px; /* Adjust the desired height here */
     margin: 0 auto;
@@ -67,8 +66,8 @@ body {
     overflow-y: scroll;
   }
   
-  .employee_table th,
-  .employee_table td {
+  .position_table th,
+  .position_table td {
     padding: 10px;
     text-align: left;
     white-space: nowrap;
@@ -76,12 +75,12 @@ body {
     text-overflow: ellipsis;
   }
   
-  .list_employee {
+  .list_position {
     background-color: #f2f2f2;
     font-weight: bold;
   }
   
-  .employee_option {
+  .position_option {
     text-align: center;
   }
   
@@ -97,38 +96,39 @@ body {
     cursor: pointer;
   }
   
-  /* Form to Add Employee */
-  .employee_form_add {
+  /* Form to Add Position */
+  .position_form_add {
     display: none;
     margin-top: 20px;
   }
-    /* Find Button Styles */
-    form button[type="button"] {
-      display: inline-block;
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: #2196f3;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    
-    form button[type="button"]:hover {
-      background-color: #0d8bf5;
-    }
   
-  .employee_form_add label,
-  .employee_form_edit label {
+  /* Find Button Styles */
+  form.position_form_find button[type="button"] {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  form.position_form_find button[type="button"]:hover {
+    background-color: #0d8bf5;
+  }
+  
+  .position_form_add label,
+  .position_form_edit label {
     display: block;
     margin-top: 10px;
   }
   
-  .employee_form_add input[type="text"],
-  .employee_form_add input[type="email"],
-  .employee_form_edit input[type="text"],
-  .employee_form_edit input[type="email"] {
+  .position_form_add input[type="text"],
+  .position_form_add input[type="date"],
+  .position_form_edit input[type="text"],
+  .position_form_edit input[type="date"] {
     width: 99%;
     padding: 5px;
     margin-top: 5px;
@@ -137,10 +137,10 @@ body {
     outline: none;
   }
   
-  .employee_form_add button[type="submit"],
-  .employee_form_edit button[type="submit"],
-  .employee_form_add button[type="button"],
-  .employee_form_edit button[type="button"] {
+  .position_form_add button[type="submit"],
+  .position_form_edit button[type="submit"],
+  .position_form_add button[type="button"],
+  .position_form_edit button[type="button"] {
     display: inline-block;
     margin-top: 10px;
     padding: 10px 20px;
