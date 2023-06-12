@@ -57,7 +57,7 @@ body {
   
   /* Table Styles */
   .job_table {
-    width: 47%;
+    width: 48%;
     table-layout: fixed;
     max-height: 275px; /* Adjust the desired height here */
     margin: 0 auto;
